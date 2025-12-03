@@ -101,7 +101,8 @@
     .hero-btns { 
       display: flex; 
       gap: 10px; 
-      flex-wrap: wrap; 
+      flex-wrap: wrap;
+      margin-top: 15px;
     }
 
     /* বাটনের সাইজ একটু কমপ্যাক্ট করা হয়েছে যাতে ৩টি পাশাপাশি ধরে */
@@ -794,7 +795,7 @@
       .process-steps::-webkit-scrollbar { 
         display: none; 
       }
-    
+
       /* ২. কার্ডের সাইজ ফিক্স করা (যাতে চ্যাপ্টা না হয়) */
       .step {
         flex: 0 0 160px !important;        /* ফিক্সড চওড়া ১৬০ পিক্সেল */
@@ -807,18 +808,18 @@
         padding: 15px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.05);
       }
-    
+
       /* ৩. মোবাইলে মাঝখানের তীর চিহ্ন লুকানো */
       .arrow-icon {
         display: none !important;
       }
-    
+
       /* ৪. নিচে অ্যানিমেটেড নির্দেশিকা (Hint) */
       .process-container {
         position: relative; 
         padding-bottom: 20px !important;
       }
-    
+
       .process-container::after {
         content: '👉 ধাপগুলো দেখতে বাম দিকে টানুন'; 
         font-family: 'Hind Siliguri', sans-serif;
@@ -837,11 +838,362 @@
         border: 1px solid #bae6fd;
         font-weight: 600;
       }
-    
+
       /* স্লাইড এনিমেশন */
       @keyframes bounceRight {
         0%, 100% { transform: translateX(-50%) translateX(0); }
         50% { transform: translateX(-50%) translateX(5px); }
+      }
+    }
+    /* --- OFFER POPUP STYLES --- */
+    .popup-overlay {
+      display: none; /* শুরুতে লুকানো থাকবে, JS দিয়ে চালু হবে */
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7); /* পেছনের কালো আভা */
+      z-index: 99999; /* সবার উপরে থাকার জন্য */
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      backdrop-filter: blur(5px); /* ব্যাকগ্রাউন্ড ব্লার এফেক্ট */
+    }
+
+    .popup-content {
+      background: white;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      animation: popupZoom 0.4s ease-out;
+    }
+
+    @keyframes popupZoom {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .popup-close-btn {
+      position: absolute;
+      top: 10px; right: 15px;
+      background: rgba(255, 255, 255, 0.3);
+      border: none;
+      font-size: 2rem;
+      color: white;
+      cursor: pointer;
+      line-height: 1;
+      z-index: 10;
+    }
+    .popup-close-btn:hover { color: #fecaca; }
+
+    .popup-header {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+      padding: 30px 20px 20px;
+      text-align: center;
+    }
+
+    .popup-header h2 {
+      font-size: 1.5rem;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .popup-body {
+      padding: 25px;
+      color: #334155;
+    }
+
+    .offer-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      background: #fff1f2; /* হালকা লাল ব্যাকগ্রাউন্ড */
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px dashed #fca5a5;
+    }
+
+    .offer-list li {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+    }
+
+    .offer-list li i {
+      color: #16a34a; /* সবুজ টিক চিহ্ন */
+    }
+
+    .btn-offer-cta {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: 0.3s;
+      animation: pulseBtn 2s infinite;
+      text-align: center;
+    }
+
+    .btn-offer-cta:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+    }
+
+    @keyframes pulseBtn {
+      0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+    }
+
+    /* --- PREMIUM BRANDING SECTION STYLES (WITH IMAGE) --- */
+    .brand-wrapper {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      border: 1px solid #f1f5f9;
+      margin-top: 30px; /* Hero section থেকে একটু ফাঁকা */
+    }
+    
+    /* Header Bio Layout */
+    .brand-intro {
+      max-width: 900px;
+      margin: 0 auto 50px auto;
+    }
+    
+    .brand-title {
+      font-size: 2rem;
+      color: var(--secondary);
+      margin-bottom: 30px;
+      text-align: center;
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: block;
+    }
+
+    /* Image & Text Flex Container */
+    .bio-container {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      background: #f8fafc;
+      padding: 30px;
+      border-radius: 20px;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Image Styles */
+    .bio-img-box {
+      flex: 0 0 180px;
+      text-align: center;
+    }
+    .bio-img-box img {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 5px solid white;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.15);
+    }
+
+    /* Text Styles */
+    .brand-bio-text {
+      flex: 1;
+      font-size: 1.05rem;
+      color: #475569;
+      line-height: 1.7;
+      text-align: left;
+    }
+    .salam {
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+    .highlight-pill {
+      background: #dbeafe;
+      color: var(--primary-dark);
+      padding: 2px 10px;
+      border-radius: 15px;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+    
+    /* Grid Layout */
+    .why-title {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 1.5rem;
+      color: var(--secondary);
+    }
+    
+    .brand-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+    
+    .brand-card {
+      background: #f8fafc;
+      padding: 25px;
+      border-radius: 15px;
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+    
+    .brand-card:hover {
+      transform: translateY(-5px);
+      background: white;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      border-color: var(--primary);
+    }
+    
+    .card-icon {
+      width: 50px; height: 50px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
+    }
+    
+    .brand-card h4 {
+      color: var(--secondary);
+      margin-bottom: 10px;
+      font-size: 1.15rem;
+    }
+    
+    .brand-card p {
+      font-size: 0.95rem;
+      color: #64748b;
+      line-height: 1.6;
+    }
+    
+    /* Mission Box */
+    .brand-mission-box {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border-radius: 15px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      border: 2px dashed #bae6fd;
+    }
+    
+    .mission-content h3 {
+      color: var(--primary-dark);
+      margin-bottom: 15px;
+    }
+    .mission-content p {
+      max-width: 700px;
+      margin: 0 auto 30px auto;
+      font-size: 1.1rem;
+      font-style: italic;
+      color: #334155;
+    }
+    
+    /* CTA Button */
+    .btn-brand-cta {
+      background: var(--primary);
+      color: white;
+      padding: 15px 40px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+      transition: all 0.3s ease;
+      animation: pulse-blue 2s infinite;
+    }
+    .btn-brand-cta:hover {
+      background: var(--primary-dark);
+      transform: scale(1.05);
+      color: white;
+    }
+    @keyframes pulse-blue {
+      0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
+      70% { box-shadow: 0 0 0 15px rgba(37, 99, 235, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+    }
+    
+    /* Mobile Adjustments */
+    @media (max-width: 768px) {
+      .brand-wrapper { padding: 25px 20px; }
+      .brand-title { font-size: 1.5rem; }
+      
+      /* মোবাইলে ছবি উপরে এবং লেখা নিচে */
+      .bio-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+        padding: 20px;
+      }
+      .brand-bio-text { text-align: center; }
+      
+      .brand-grid { grid-template-columns: 1fr; }
+    }
+
+    /* --- STATS GRID ANIMATION --- */
+
+    /* শুরুতে কার্ডগুলো লুকিয়ে রাখা এবং অ্যানিমেশন সেট করা */
+    .stat-card {
+      opacity: 0; /* শুরুতে দেখা যাবে না */
+      animation: fadeInUp 0.8s ease-out forwards; /* অ্যানিমেশন কল করা */
+      transition: transform 0.3s ease, box-shadow 0.3s ease; /* হোভার ইফেক্টের জন্য */
+    }
+
+    /* ১ম কার্ড (৩০০+) ০.২ সেকেন্ড পর আসবে */
+    .stat-card:nth-child(1) {
+      animation-delay: 0.2s;
+    }
+
+    /* ২য় কার্ড (৯৫%) ০.৪ সেকেন্ড পর আসবে */
+    .stat-card:nth-child(2) {
+      animation-delay: 0.4s;
+    }
+
+    /* ৩য় কার্ড (৮+) ০.৬ সেকেন্ড পর আসবে */
+    .stat-card:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+
+    /* কার্ডের ওপর মাউস নিলে একটু ভেসে উঠবে */
+    .stat-card:hover {
+      transform: translateY(-10px) !important; /* উপরে উঠবে */
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1); /* সুন্দর শ্যাডো */
+      border-bottom-color: var(--primary); /* বর্ডার কালার চেঞ্জ হবে */
+    }
+
+    /* অ্যানিমেশন কিফ্রেম (কিভাবে কাজ করবে) */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px); /* নিচ থেকে শুরু */
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0); /* সঠিক জায়গায় আসবে */
       }
     }
   </style>
@@ -867,7 +1219,7 @@
       <div class="hero-img-box">
         <img src="profile.png" alt="Profile" class="profile-img">
         <div class="exp-badge">
-          <span style="font-size: 1.5rem; font-weight: bold; display: block;">৭+</span>
+          <span style="font-size: 1.5rem; font-weight: bold; display: block;">৮+</span>
           <small>বছরের অভিজ্ঞতা</small>
         </div>
       </div>
@@ -880,7 +1232,7 @@
         </div>
         <h1>মোঃ সোলায়মান হোসেন আলম</h1>
         <p class="bio">
-          "আসসালামু আলাইকুম ওয়া রাহমাতুল্লাহি ওয়া বারাকাতুহ। গণিত কোনো ভয়ের বিষয় নয়, এটি একটি ভাষা।" আমি গত ৭ বছর ধরে এই ভাষাই শিক্ষার্থীদের সহজ করে শিখিয়ে আসছি। আমার লক্ষ্য ছাত্রদের শুধু বইয়ের অংক মুখস্থ করানো নয়, বরং গণিতের বেসিক এমনভাবে তৈরি করা যেন তারা সারাজীবন মনে রাখে।
+          গণিত কোনো ভয়ের বিষয় নয়, এটি একটি ভাষা।" আমি গত ৮ বছর ধরে এই ভাষাই শিক্ষার্থীদের সহজ করে শিখিয়ে আসছি। সঠিক গাইডলাইন পেলে আপনার সন্তানও গণিতে দক্ষ হতে পারে।
         </p>
         
         <div class="hero-btns">
@@ -893,12 +1245,11 @@
           </a>
           
           <a href="#quiz-section" class="btn btn-quiz">
-            <i class="fa-solid fa-clipboard-question"></i> সন্তানের বেসিক টেস্ট করুন
+            <i class="fa-solid fa-clipboard-question"></i> সন্তানের গণিত দক্ষতা যাচাই করুন
           </a>
         </div>
       </div>
     </header>
-
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-num">৩০০+</div>
@@ -909,11 +1260,87 @@
         <div style="color:#64748b">সফলতার হার</div>
       </div>
       <div class="stat-card">
-        <div class="stat-num">৭+</div>
+        <div class="stat-num">৮+</div>
         <div style="color:#64748b">বছরের অভিজ্ঞতা</div>
       </div>
     </div>
-
+    <!--About & why me Start-->
+    <section class="brand-wrapper">
+      
+      <div class="brand-intro">
+        <h2 class="brand-title">আমি কে? এবং কেনো আমিই সঠিক সিদ্ধান্ত?</h2>
+        
+        <div class="bio-container">
+          <div class="bio-img-box">
+            <img src="profile.png" alt="Md. Solayman Hossain Alam">
+          </div>
+      
+          <div class="brand-bio-text">
+            <p class="salam">আসসালামু আলাইকুম ওয়া রাহমাতুল্লাহি ওয়া বারাকাতুহ।</p>
+            <p>
+              আমি <strong>মোঃ সোলায়মান হোসেন আলম</strong>, কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিং-এ মাস্টার্স (১ম বিভাগ) এবং <span class="highlight-pill">৮+ বছরের অভিজ্ঞ</span> গণিত শিক্ষক।
+            </p>
+            <p>
+              আমি শুধু গণিত পড়াই না—আমি প্রতিটি শিক্ষার্থীকে গণিতকে বুঝতে, ভালোবাসতে এবং আত্মবিশ্বাসী হতে সাহায্য করি। আমার কাছে গণিত শুধু একটি বিষয় নয়—এটি হলো সমস্যা সমাধান, যুক্তি, ধৈর্য ও আত্মবিশ্বাস গঠনের একটি পথ।
+            </p>
+          </div>
+        </div>
+      </div>
+    
+      <h3 class="why-title"><i class="fa-solid fa-star"></i> কেন আমাকে বেছে নেবেন?</h3>
+      
+      <div class="brand-grid">
+        
+        <div class="brand-card">
+          <div class="card-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+          <h4>কঠিন বিষয়কে সহজ করা</h4>
+          <p>বাস্তব উদাহরণ, গল্প ও ধাপে ধাপে ব্যাখ্যা—যাতে দুর্বল ছাত্রও বোঝে এবং মেধাবীরা আরও দক্ষ হয়।</p>
+        </div>
+    
+        <div class="brand-card">
+          <div class="card-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+          <h4>ভুল বিশ্লেষণ ও সমাধান</h4>
+          <p>ছাত্র কোথায় ভুল করছে তা বুঝে তার উপযোগী সমাধান, এক্সারসাইজ ও ছোট টেকনিক দেওয়া হয়।</p>
+        </div>
+    
+        <div class="brand-card">
+          <div class="card-icon"><i class="fa-solid fa-user-graduate"></i></div>
+          <h4>অভিজ্ঞতা ও সাফল্য</h4>
+          <p>৮+ বছরের অভিজ্ঞতায় অসংখ্য "গণিতে দুর্বল" ছাত্র জিপিএ–৫ পেয়েছে এবং আত্মবিশ্বাস ফিরে পেয়েছে।</p>
+        </div>
+    
+        <div class="brand-card">
+          <div class="card-icon"><i class="fa-solid fa-layer-group"></i></div>
+          <h4>লেভেল ভিত্তিক কৌশল</h4>
+          <p>ক্লাস ৬–১০ এর প্রতিটি লেভেলের জন্য আলাদা কৌশল। বয়স ও দক্ষতা অনুযায়ী কনটেন্ট অ্যাডজাস্ট করি।</p>
+        </div>
+    
+        <div class="brand-card">
+          <div class="card-icon"><i class="fa-solid fa-file-medical"></i></div>
+          <h4>ফ্রি টেস্ট + রিপোর্ট</h4>
+          <p>শুধু পড়াই না—আপনার সন্তান কোথায় ও কেন দুর্বল, সেটার পরিষ্কার রিপোর্ট ও গাইডলাইন দিই।</p>
+        </div>
+    
+        <div class="brand-card">
+          <div class="card-icon"><i class="fa-solid fa-heart"></i></div>
+          <h4>ধৈর্য ও যত্ন</h4>
+          <p>আমার বিশ্বাস— “সঠিক শিক্ষক + সঠিক গাইডলাইন = যে কেউ গণিতে সেরা হতে পারে।”</p>
+        </div>
+    
+      </div>
+    
+      <div class="brand-mission-box">
+        <div class="mission-content">
+          <h3><i class="fa-solid fa-bullseye"></i> আমার লক্ষ্য</h3>
+          <p>
+            শুধু ভালো নম্বর নয়—আমি চেষ্টা করি যেন প্রতিটি শিক্ষার্থী গণিতকে বোঝে, উপভোগ করে এবং আত্মবিশ্বাসী হয়। যদি একটি ছাত্র মনে করে— <em>“স্যার আমাকে বুঝতে পারেন”</em>—তাহলেই তার অর্ধেক সাফল্য অর্জিত।
+          </p>
+        </div>
+      </div>
+    
+    </section>
+    <!--About & why me end-->
+<!--
     <div class="process-container">
       <h2 class="section-title">আমার পড়ানোর পদ্ধতি</h2>
       <p style="text-align:center; color:#64748b; margin-bottom:20px;">গণিতকে বোঝার বিষয় বানাই, মুখস্থের নয়।</p>
@@ -929,7 +1356,7 @@
         <div class="arrow-icon"><i class="fa-solid fa-arrow-right"></i></div>
         <div class="step"><div class="step-icon"><i class="fa-solid fa-trophy"></i></div><h4>পরীক্ষা</h4></div>
       </div>
-    </div>
+    </div> -->
 
     <!--Teaching demo-->
     <div class="flip-section-wrap">
@@ -1807,7 +2234,7 @@
                 </div>
                 <div class="footer-contact-item">
                     <i class="fa-brands fa-whatsapp"></i> 
-                    <a href="https://wa.me/8801639498196">WhatsApp: wa.me/8801639498196</a>
+                    <a href="https://wa.me/8801639498196">WhatsApp: +8801639498196</a>
                 </div>
                 <div class="footer-contact-item">
                     <i class="fa-solid fa-location-dot"></i> 
@@ -2302,12 +2729,83 @@
         }
       });
     });
+    // --- OFFER POPUP LOGIC ---
+
+    // ১. পেজ লোড হওয়ার ২ সেকেন্ড পর পপ-আপ দেখাবে (যদি আগে সেশনে বন্ধ না করে থাকে)
+    window.addEventListener('load', function() {
+      // চেক করবে ইউজার কি আগেই এই সেশনে পপ-আপ দেখেছে কিনা
+      if (!sessionStorage.getItem('offerPopupShown')) {
+        setTimeout(function() {
+          document.getElementById('offer-popup').style.display = 'flex';
+        }, 2000); // ২ সেকেন্ড দেরি করে আসবে
+      }
+    });
+
+    // ২. পপ-আপ বন্ধ করার ফাংশন
+    function closeOfferPopup() {
+      document.getElementById('offer-popup').style.display = 'none';
+      // সেশন স্টোরেজে সেভ করা যাতে রিফ্রেশ দিলে বারবার বিরক্ত না করে
+      sessionStorage.setItem('offerPopupShown', 'true');
+    }
+
+    // ৩. অফার বাটনে ক্লিক করলে কুইজ সেকশনে নিয়ে যাবে
+    function goToQuizFromPopup() {
+      closeOfferPopup(); // পপ-আপ বন্ধ হবে
+      document.getElementById('quiz-section').scrollIntoView({ 
+        behavior: 'smooth' 
+      });
+    }
+
+    // ৪. পপ-আপের বাইরের কালো অংশে ক্লিক করলেও বন্ধ হবে
+    window.onclick = function(event) {
+      const modal = document.getElementById('offer-popup');
+      // রিপোর্ট মডাল বা অফার মডাল - যেটাই হোক, বাইরে ক্লিক করলে বন্ধ হবে
+      if (event.target == modal) {
+        closeOfferPopup();
+      }
+      // আপনার আগের রিপোর্ট মডালের লজিকও এখানে রাখতে পারেন
+      const reportModal = document.getElementById('report-modal');
+      if (event.target == reportModal) {
+        reportModal.style.display = "none";
+      }
+    }
   </script>
+    <div id="offer-popup" class="popup-overlay">
+    <div class="popup-content">
+      <button class="popup-close-btn" onclick="closeOfferPopup()">&times;</button>
+      
+      <div class="popup-header">
+        <h2>🎁 বিশেষ জানুয়ারি অফার! <span style="font-size:0.8rem; display:block; margin-top:5px; color:#fef08a;">(সীমিত সময়)</span></h2>
+      </div>
+      
+      <div class="popup-body">
+        <p style="text-align: center; color: #dc2626; font-weight: bold; margin-bottom: 15px;">
+          ১১ জানুয়ারি, ২০২৬—পর্যন্ত সম্পূর্ণ ফ্রি!
+        </p>
+        
+        <p style="text-align: center; margin-bottom: 10px;">
+          আপনি কি নিজের সন্তানের গণিত দক্ষতা যাচাই করতে চান? <br>
+          <span style="color: #b91c1c; background: #fee2e2; padding: 2px 8px; border-radius: 5px; font-weight: bold;">মাত্র ১৫ মিনিটেই বুঝে ফেলুন— কোথায় উন্নতি দরকার! </span> 
+          <br>
+          <strong>এখন পাচ্ছেন ০ টাকা খরচে:</strong>
+        </p>
+        
+        <ul class="offer-list">
+          <li><i class="fa-solid fa-check-circle"></i> প্রফেশনাল লেভেলের লাইভ গণিত টেস্ট</li>
+          <li><i class="fa-solid fa-check-circle"></i> ক্লাস ৬–১০ অনুযায়ী প্রশ্ন সিলেকশন</li>
+          <li><i class="fa-solid fa-check-circle"></i> দুর্বলতা ও শক্তির—তাৎক্ষণিক রিপোর্ট</li>
+          <li><i class="fa-solid fa-check-circle"></i> উন্নতির জন্য ব্যক্তিগত সাজেশন</li>
+        </ul>
+
+        <p style="text-align: center; font-size: 0.9rem; margin: 15px 0; color: #64748b;">
+          এ সুযোগ শুধু <strong>১১ জানুয়ারি, ২০২৬</strong> পর্যন্ত। এরপর এই সুবিধাটি আর ফ্রি থাকবে না।
+        </p>
+
+        <button class="btn-offer-cta" onclick="goToQuizFromPopup()">
+          👉 এখনই Live Test দিন
+        </button>
+          </div>
+        </div>
+     </div>
 </body>
 </html>
-
-
-
-
-
-
