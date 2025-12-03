@@ -561,46 +561,73 @@
       display: none;
     }
 
-    /* Scroll Story*/
-    /* --- SCROLLABLE SUCCESS STORY WALL --- */
-    /* --- SCROLLABLE SUCCESS STORY WALL --- */
-    .success-grid { 
-      display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-      gap: 20px; 
-      margin: 0 auto;
-      
-      /* আগে ছিল 800px, এখন কমিয়ে 500px করা হলো */
-      max-height: 500px; 
-      
-      overflow-y: auto;  
-      padding: 10px;     
-      
-      scrollbar-width: thin; 
-      scrollbar-color: var(--primary) #e2e8f0;
+    /* Success Story*/
+
+    /* --- SUCCESS STORY SLIDER STYLES --- */
+    .success-carousel-wrap {
+      position: relative;
+      padding: 10px 0;
     }
 
-    /* ওয়েবকিট ব্রাউজার (Chrome, Safari) এর জন্য স্ক্রলবার ডিজাইন */
-    .success-grid::-webkit-scrollbar {
-      width: 8px;
+    .success-track {
+      display: flex; /* কার্ডগুলোকে পাশাপাশি রাখে */
+      gap: 20px;
+      overflow-x: auto; /* হরাইজন্টাল স্ক্রল অন */
+      scroll-behavior: smooth;
+      padding: 50px 10px 30px 10px; /* শ্যাডোর জন্য প্যাডিং */
+      
+      /* স্ক্রলবার লুকানো (ক্লিন লুকের জন্য) */
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE/Edge */
     }
-    .success-grid::-webkit-scrollbar-track {
-      background: #f1f5f9;
-      border-radius: 10px;
-    }
-    .success-grid::-webkit-scrollbar-thumb {
-      background-color: #cbd5e1; 
-      border-radius: 10px;
-      border: 2px solid #f1f5f9;
-    }
-    .success-grid::-webkit-scrollbar-thumb:hover {
-      background-color: var(--primary); 
+    .success-track::-webkit-scrollbar { 
+      display: none; /* Chrome/Safari */
     }
 
-    /* আগের লুকানো ক্লাসটি এখন দৃশ্যমান করে দিচ্ছি, যাতে সব লোড হয় */
-    .hidden-story {
-      display: block !important; 
+    .story-card-success {
+      min-width: 300px; /* কার্ডের ফিক্সড চওড়া */
+      max-width: 300px;
+      flex-shrink: 0;   /* কার্ড যেন চ্যাপ্টা না হয়ে যায় */
+      display: block !important; /* আগের hidden ক্লাস ওভাররাইড */
+      
+      background: white; 
+      padding: 25px; 
+      border-radius: 15px; 
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05); 
+      border-bottom: 5px solid;
+      transition: transform 0.3s ease;
     }
+    
+    .story-card-success:hover {
+      transform: translateY(-5px);
+    }
+    
+    /* স্লাইডার বাটন ডিজাইন */
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 45px; height: 45px;
+      background: white;
+      color: var(--secondary);
+      border-radius: 50%;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      cursor: pointer;
+      z-index: 10;
+      font-size: 1.2rem;
+      transition: 0.3s;
+    }
+    .nav-btn:hover { background: var(--primary); color: white; }
+    .prev-s-btn { left: -15px; }
+    .next-s-btn { right: -15px; }
+
+    @media (max-width: 768px) {
+      .prev-s-btn { left: 0; }
+      .next-s-btn { right: 0; }
+    }
+
     /* end */
 
     /* Kivabe porai demo */
@@ -669,6 +696,25 @@
       overflow-y: auto; /* লেখা বেশি হলে স্ক্রল হবে */
       border-color: var(--primary);
     }
+      /* কার্ডের উল্টো পাশে ছোট করে প্রশ্ন দেখানোর ডিজাইন */
+    .mini-q-ref {
+      background: rgba(255, 255, 255, 0.7); /* হালকা সাদা ব্যাকগ্রাউন্ড */
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      color: #475569;
+      margin-bottom: 12px;
+      width: 100%;
+      border-left: 3px solid var(--primary);
+      text-align: left;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .mini-q-ref strong {
+      display: block;
+      color: var(--secondary);
+      font-size: 0.85rem;
+      margin-bottom: 2px;
+    }
 
     /* ক্যাটাগরি ব্যাজ */
     .topic-badge {
@@ -716,7 +762,16 @@
       display: none;
     }
     /*end*/
-
+    /*quiz - শেষ ১ মিনিটে টাইমারকে লাল রঙের পালস (Pulse) এফেক্ট দেবে।*/
+    @keyframes timerPulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .pulse-timer {
+      animation: timerPulse 1s infinite;
+    }
+    /*end*/
   </style>
 </head>
 <body>
@@ -814,21 +869,24 @@
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <span class="topic-badge bg-pati">পাটিগণিত (Class 6-7)</span>
-              <h4 class="card-q-title">কেক বানানোর অনুপাত</h4>
-              <p class="card-q-text">৩ : ৪ : ৫</p>
-              <p style="font-size:0.9rem;">মোট ২৪ মিনিট লাগলে, <strong>তানি</strong> কতক্ষণ কাজ করল?</p>
+              <span class="topic-badge bg-geo">পরিমিতি (Square)</span>
+              <h4 class="card-q-title">বর্গক্ষেত্রের গোপন কর্ণ</h4>
+              <p class="card-q-text">কর্ণ = ১০√২</p>
+              <p style="font-size:0.9rem;">বর্গক্ষেত্রটির বাহুর দৈর্ঘ্য কত?</p>
               <p style="margin-top:10px; font-size:0.8rem; color:#94a3b8;">(উত্তর দেখতে টাচ করুন)</p>
             </div>
             <div class="flip-card-back">
-              <div class="sol-title">🍰 কেক-ঘড়ির গল্প</div>
-              <div class="sol-body">
-                <p>ভাবো ঘড়ির ৩টা কাঁটা। মোট ভাগ = ৩+৪+৫ = ১২।<br>
-                ২৪ মিনিট মানে ১২ ভাগ।<br>
-                ১ ভাগ = ২ মিনিট।<br>
-                তানির ভাগ ৪, তাই ৪ x ২ = ৮ মিনিট।</p>
+              <div class="mini-q-ref">
+                <strong>প্রশ্ন:</strong> কর্ণ ১০√২ হলে বাহু কত?
               </div>
-              <div class="final-ans">✅ উত্তর: ৮ মিনিট</div>
+              <div class="sol-title">🕵️ গোপন কর্ণের রহস্য</div>
+              <div class="sol-body">
+                <p>বর্গক্ষেত্র গর্ব করে বলল, "আমার কর্ণ ১০√২"।<br>
+                সূত্র মতে: কর্ণ = a√২<br>
+                সুতরাং, a√২ = ১০√২<br>
+                উভয় পাশ থেকে √২ বাদ দিলে থাকে ১০।</p>
+              </div>
+              <div class="final-ans">✅ উত্তর: ১০ সে.মি.</div>
             </div>
           </div>
         </div>
@@ -836,18 +894,71 @@
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <span class="topic-badge bg-pati">পাটিগণিত (Class 7)</span>
-              <h4 class="card-q-title">ধারাবাহিক ডিসকাউন্ট</h4>
-              <p class="card-q-text">৫০০ টাকায় ১০% + ১০% ছাড়</p>
-              <p style="font-size:0.9rem;">দুইবার ১০% ছাড়ের পর দাম কত?</p>
+              <span class="topic-badge bg-pati">পাটিগণিত (Percentage)</span>
+              <h4 class="card-q-title">সংখ্যা কমে যাওয়া</h4>
+              <p class="card-q-text">সংখ্যা - ৩০% = ১৪০</p>
+              <p style="font-size:0.9rem;">মূল সংখ্যাটি কত?</p>
             </div>
             <div class="flip-card-back">
-              <div class="sol-title">🎢 ডিসকাউন্ট রোলার কোস্টার</div>
-              <div class="sol-body">
-                <p>১ম বার ১০% কমে: ৫০০ - ৫০ = ৪৫০।<br>
-                ২য় বার ৪৫০ এর ১০% কমে: ৪৫০ - ৪৫ = ৪০৫।</p>
+              <div class="mini-q-ref">
+                <strong>প্রশ্ন:</strong> ৩০% কমার পর ১৪০ হলে মূল সংখ্যা?
               </div>
-              <div class="final-ans">📘 উত্তর: ৪০৫ টাকা</div>
+              <div class="sol-title">😢 দুঃখী সংখ্যার গল্প</div>
+              <div class="sol-body">
+                <p>৩০% কেটে নেওয়ায় বাকি থাকে ৭০%।<br>
+                সংখ্যাটি বলল, "আমার এই ৭০% মানেই হলো ১৪১।"<br>
+                ১% = ২, তাই ১০০% = ২০০।</p>
+              </div>
+              <div class="final-ans">🎯 উত্তর: ২০০</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <span class="topic-badge bg-geo">পরিমিতি (Volume)</span>
+              <h4 class="card-q-title">সিলিন্ডারের দালান</h4>
+              <p class="card-q-text">r = 7, h = 12</p>
+              <p style="font-size:0.9rem;">সিলিন্ডারের আয়তন কত?</p>
+            </div>
+            <div class="flip-card-back">
+              <div class="mini-q-ref">
+                <strong>প্রশ্ন:</strong> r=7, h=12 হলে আয়তন?
+              </div>
+              <div class="sol-title">🏢 বিশাল জায়গার গল্প</div>
+              <div class="sol-body">
+                <p>সিলিন্ডার বলল, "আমার পেটের ভেতর কত জায়গা জানো?"<br>
+                সূত্র: V = πr²h<br>
+                = (২২/৭) × ৪৯ × ১২<br>
+                = ১৮৪৮ ঘন সেমি।</p>
+              </div>
+              <div class="final-ans">📦 উত্তর: ১৮৪৮ ঘন সেমি</div>
+            </div>
+          </div>
+        </div>
+
+        
+
+        <div class="flip-card hidden-flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <span class="topic-badge bg-geo">জ্যামিতি (Triangle)</span>
+              <h4 class="card-q-title">পারিবারিক সভা</h4>
+              <p class="card-q-text">কোণ: ৪০° ও ৭৫°</p>
+              <p style="font-size:0.9rem;">৩য় কোণটি কত?</p>
+            </div>
+            <div class="flip-card-back">
+              <div class="mini-q-ref">
+                <strong>প্রশ্ন:</strong> দুটি কোণ ৪০° ও ৭৫° হলে ৩য়টি?
+              </div>
+              <div class="sol-title">🔺 তিন ভাইয়ের গল্প</div>
+              <div class="sol-body">
+                <p>বড় দুই ভাই মিলে হলো: ৪০+৭৫ = ১১৫°।<br>
+                বাকি থাকে: ১৮০ - ১১৫ = ৬৫°।<br>
+                ছোট ভাই বলল, "আমি ৬৫°, ভুলে যেও না!"</p>
+              </div>
+              <div class="final-ans">📐 উত্তর: ৬৫°</div>
             </div>
           </div>
         </div>
@@ -855,20 +966,44 @@
         <div class="flip-card hidden-flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <span class="topic-badge bg-bij">বীজগণিত (Class 7-8)</span>
-              <h4 class="card-q-title">মান নির্ণয়</h4>
-              <p class="card-q-text">3x<sup>2</sup> - 2x + 7</p>
-              <p style="font-size:0.9rem;">যদি <span class="math-symbol">x</span> = 5 হয়, তবে মান কত?</p>
+              <span class="topic-badge bg-bij">বীজগণিত (Equation)</span>
+              <h4 class="card-q-title">দুটি সংখ্যার প্রেম</h4>
+              <p class="card-q-text">যোগফল ৩০, গুণফল ২০০</p>
+              <p style="font-size:0.9rem;">সংখ্যা দুটি কী কী?</p>
             </div>
             <div class="flip-card-back">
-              <div class="sol-title">👑 ফাইভ-ল্যান্ডের রাজা</div>
-              <div class="sol-body">
-                <p>রাজা (x) যেখানে যায়, বর্গ করে।<br>
-                3x<sup>2</sup> = 3 × 25 = 75<br>
-                -2x = -10<br>
-                হিসাব: 75 - 10 + 7 = 72</p>
+              <div class="mini-q-ref">
+                <strong>প্রশ্ন:</strong> যোগ ৩০, গুণ ২০০ হলে সংখ্যাদ্বয়?
               </div>
-              <div class="final-ans">🎯 উত্তর: ৭২</div>
+              <div class="sol-title">🎭 ছদ্মবেশে দ্বিঘাত সমীকরণ</div>
+              <div class="sol-body">
+                <p>সমীকরণ সাজালে পাই: x² - 30x + 200 = 0<br>
+                ফ্যাক্টর করলে: (x - 20)(x - 10)<br>
+                অবশেষে দুই বন্ধু মুখ খুলল, তারা ১০ আর ২০!</p>
+              </div>
+              <div class="final-ans">🔢 উত্তর: ১০ এবং ২০</div>
+            </div>
+          </div>
+        </div>
+        <div class="flip-card hidden-flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <span class="topic-badge bg-pati">পাটিগণিত (Reverse %)</span>
+              <h4 class="card-q-title">হারিয়ে যাওয়া সংখ্যা</h4>
+              <p class="card-q-text">সংখ্যা - ২৫% = ৭৫</p>
+              <p style="font-size:0.9rem;">মূল সংখ্যাটি কত?</p>
+            </div>
+            <div class="flip-card-back">
+              <div class="mini-q-ref">
+                <strong>প্রশ্ন:</strong> ২৫% কমার পর ৭৫ হলে সংখ্যাটি?
+              </div>
+              <div class="sol-title">🍰 এক চতুর্থাংশের কান্না</div>
+              <div class="sol-body">
+                <p>২৫% (১/৪ অংশ) কেটে নেওয়ায় সে ৭৫।<br>
+                মানে ৩ ভাগে ৭৫, এক ভাগে ২৫।<br>
+                তাহলে পুরো ৪ ভাগ = ২৫ × ৪ = ৩০০।</p>
+              </div>
+              <div class="final-ans">💯 উত্তর: ৩০০</div>
             </div>
           </div>
         </div>
@@ -876,20 +1011,22 @@
         <div class="flip-card hidden-flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <span class="topic-badge bg-pati">পাটিগণিত (Class 6-7)</span>
-              <h4 class="card-q-title">পিজ্জা খাওয়ার লড়াই</h4>
-              <p class="card-q-text"><sup>3</sup>&frasl;<sub>8</sub> বনাম <sup>1</sup>&frasl;<sub>4</sub></p>
-              <p style="font-size:0.9rem;">রাহাত খেল ৩/৮ অংশ আর মিম ১/৪ অংশ। কে বেশি খেল?</p>
+              <span class="topic-badge bg-pati">পাটিগণিত (LCM)</span>
+              <h4 class="card-q-title">বন্ধুদের গোপন ক্লু</h4>
+              <p class="card-q-text">সংখ্যা: ১২ ও ১৫</p>
+              <p style="font-size:0.9rem;">ল.সা.গু কত?</p>
             </div>
             <div class="flip-card-back">
-              <div class="sol-title">🍕 পিজা রাজ্যের সৈন্য</div>
-              <div class="sol-body">
-                <p>৮ টুকরা পিজা।<br>
-                রাহাত: ৮ এর ৩/৮ = ৩ টুকরা।<br>
-                মিম: ৮ এর ১/৪ = ২ টুকরা।<br>
-                ৩ > ২, তাই রাহাত জিতল!</p>
+              <div class="mini-q-ref">
+                <strong>প্রশ্ন:</strong> ১২ ও ১৫ এর ল.সা.গু?
               </div>
-              <div class="final-ans">🏆 উত্তর: রাহাত বেশি খেল</div>
+              <div class="sol-title">🤝 দুই বন্ধুর মিল</div>
+              <div class="sol-body">
+                <p>১২ এর নামতা: ১২, ২৪, ৩৬, ৪৮, ৬০...<br>
+                ১৫ এর নামতা: ১৫, ৩০, ৪৫, ৬০...<br>
+                দুজনের প্রথম দেখা হলো ৬০ এ!</p>
+              </div>
+              <div class="final-ans">🔗 উত্তর: ৬০</div>
             </div>
           </div>
         </div>
@@ -897,61 +1034,22 @@
         <div class="flip-card hidden-flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <span class="topic-badge bg-pati">পাটিগণিত (Class 8)</span>
-              <h4 class="card-q-title">ট্রেনের গতিবেগ</h4>
-              <p class="card-q-text">৬০ কি.মি./ঘণ্টা</p>
-              <p style="font-size:0.9rem;">১.৫ (দেড়) ঘণ্টায় ট্রেনটি কত দূর যাবে?</p>
-            </div>
-            <div class="flip-card-back">
-              <div class="sol-title">🚆 কিলোমিটার নদী</div>
-              <div class="sol-body">
-                <p>১ ঘণ্টায় যায় ৬০ কিমি।<br>
-                বাকি ০.৫ (অর্ধেক) ঘণ্টায় যায় ৩০ কিমি।<br>
-                মোট: ৬০ + ৩০ = ৯০ কিমি।<br>
-                অথবা: ৬০ × ১.৫ = ৯০।</p>
-              </div>
-              <div class="final-ans">📍 উত্তর: ৯০ কি.মি.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flip-card hidden-flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <span class="topic-badge bg-geo">জ্যামিতি (Class 8)</span>
-              <h4 class="card-q-title">ত্রিভুজের বাহু</h4>
-              <p class="card-q-text">বাহু: ৭ ও ৯</p>
-              <p style="font-size:0.9rem;">৩য় বাহুর দৈর্ঘ্য (x) কত হতে পারে?</p>
-            </div>
-            <div class="flip-card-back">
-              <div class="sol-title">📐 তিন ভাইয়ের নিয়ম</div>
-              <div class="sol-body">
-                <p>দুই ভাইয়ের যোগফল ৩য় ভাইয়ের চেয়ে বড় হতে হবে।<br>
-                যোগফল: ৭+৯ > x (১৬ এর কম)<br>
-                বিয়োগফল: ৯-৭ < x (২ এর বেশি)</p>
-              </div>
-              <div class="final-ans">📏 উত্তর: 2 < x < 16</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flip-card hidden-flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <span class="topic-badge bg-bij">বীজগণিত (Class 8-9)</span>
-              <h4 class="card-q-title">সরল সমীকরণ</h4>
-              <p class="card-q-text">2x - 5 = 17</p>
+              <span class="topic-badge bg-bij">বীজগণিত (Linear)</span>
+              <h4 class="card-q-title">সমীকরণের দরজা</h4>
+              <p class="card-q-text">3x - 7 = 20</p>
               <p style="font-size:0.9rem;">x এর মান কত?</p>
             </div>
             <div class="flip-card-back">
-              <div class="sol-title">🔓 পুলিশ ও আসামী</div>
-              <div class="sol-body">
-                <p>মাইনাস ৫ কে বর্ডার পার করলে প্লাস হয়।<br>
-                2x = 17 + 5 = 22<br>
-                এখন ২ দিয়ে ভাগ করলে x মুক্ত।<br>
-                x = 22 ÷ 2 = 11</p>
+              <div class="mini-q-ref">
+                <strong>প্রশ্ন:</strong> 3x - 7 = 20 হলে x?
               </div>
-              <div class="final-ans">🔑 উত্তর: x = 11</div>
+              <div class="sol-title">🔓 তালা খোলার চাবি</div>
+              <div class="sol-body">
+                <p>৭ কে ডানপাশে পাঠালে: 3x = 27<br>
+                ৩ দিয়ে ভাগ করলে দরজা খুলে গেল!<br>
+                x = 27 ÷ 3 = 9</p>
+              </div>
+              <div class="final-ans">🔑 উত্তর: ৯</div>
             </div>
           </div>
         </div>
@@ -959,20 +1057,22 @@
         <div class="flip-card hidden-flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <span class="topic-badge bg-geo">পরিমিতি (Class 9)</span>
-              <h4 class="card-q-title">আয়তক্ষেত্রের কর্ণ</h4>
-              <p class="card-q-text">দৈর্ঘ্য ১২, প্রস্থ ৮</p>
-              <p style="font-size:0.9rem;">কর্ণের দৈর্ঘ্য কত?</p>
+              <span class="topic-badge bg-pati">পাটিগণিত (Discount)</span>
+              <h4 class="card-q-title">দোকানির দ্বিগুণ ছাড়</h4>
+              <p class="card-q-text">১৫০০ টাকায় ২০% + ১০%</p>
+              <p style="font-size:0.9rem;">চূড়ান্ত দাম কত?</p>
             </div>
             <div class="flip-card-back">
-              <div class="sol-title">🏃 লুকোচুরি মাঠের শর্টকাট</div>
-              <div class="sol-body">
-                <p>পিথাগোরাস সূত্র (Pythagoras):<br>
-                √(12<sup>2</sup> + 8<sup>2</sup>)<br>
-                = √(144 + 64) = √208<br>
-                = 14.4</p>
+              <div class="mini-q-ref">
+                <strong>প্রশ্ন:</strong> ১৫০০ এর ওপর ২০% এরপর ১০% ছাড়?
               </div>
-              <div class="final-ans">📏 উত্তর: ১৪.৪ সে.মি. (প্রায়)</div>
+              <div class="sol-title">📉 ডিসকাউন্ট অফার</div>
+              <div class="sol-body">
+                <p>১ম বার (১৫০০ - ৩০০) = ১২০০<br>
+                ২য় বার ১২০০ এর ১০% (১২০) কমলে,<br>
+                ১২০০ - ১২০ = ১০৮০ টাকা।</p>
+              </div>
+              <div class="final-ans">🏷️ উত্তর: ১০৮০ টাকা</div>
             </div>
           </div>
         </div>
@@ -980,19 +1080,22 @@
         <div class="flip-card hidden-flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <span class="topic-badge bg-bij">সেট ফাংশন (Class 9-10)</span>
-              <h4 class="card-q-title">ভেন চিত্র</h4>
-              <p class="card-q-text" style="font-size:1rem;">ক্রিকেট ১৮, ফুটবল ১২, উভয় ৫</p>
-              <p style="font-size:0.9rem;">কতজন অন্তত ১টি খেলা খেলে?</p>
+              <span class="topic-badge bg-tri">ত্রিকোণমিতি (Height)</span>
+              <h4 class="card-q-title">পাহাড়ের উচ্চতা</h4>
+              <p class="card-q-text">কোণ ৩০°, দূরত্ব ৫০</p>
+              <p style="font-size:0.9rem;">উচ্চতা কত? (tan 30° = 1/√3)</p>
             </div>
             <div class="flip-card-back">
-              <div class="sol-title">⚽🏏 ডাবল এজেন্ট</div>
-              <div class="sol-body">
-                <p>মোট খেলোয়াড় = ১ম দল + ২য় দল - ডাবল এজেন্ট (উভয়)<br>
-                = ১৮ + ১২ - ৫<br>
-                = ২৫ জন।</p>
+              <div class="mini-q-ref">
+                <strong>প্রশ্ন:</strong> কোণ ৩০°, ভূমি ৫০ হলে লম্ব?
               </div>
-              <div class="final-ans">✅ উত্তর: ২৫ জন</div>
+              <div class="sol-title">⛰️ পাহাড় মাপা</div>
+              <div class="sol-body">
+                <p>সূত্র: Height = Distance × tan 30°<br>
+                = 50 × (1/√3)<br>
+                = প্রায় ২৮.৮৬ মিটার।</p>
+              </div>
+              <div class="final-ans">📏 উত্তর: ২৮.৮৬ মি. (প্রায়)</div>
             </div>
           </div>
         </div>
@@ -1000,19 +1103,45 @@
         <div class="flip-card hidden-flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <span class="topic-badge bg-tri">ত্রিকোণমিতি (Class 10)</span>
-              <h4 class="card-q-title">লম্ব ও অতিভুজ</h4>
-              <p class="card-q-text">বিপরীত বাহু ৫, অতিভুজ ১৩</p>
-              <p style="font-size:0.9rem;">sin <span class="math-symbol">θ</span> এর মান কত?</p>
+              <span class="topic-badge bg-pati">পাটিগণিত (Ratio)</span>
+              <h4 class="card-q-title">চেয়ার সাজানো</h4>
+              <p class="card-q-text">ছেলে:মেয়ে = ৩:৫</p>
+              <p style="font-size:0.9rem;">মোট ৮০টি হলে ছেলের চেয়ার?</p>
             </div>
             <div class="flip-card-back">
-              <div class="sol-title">⛰️ ম্যাথ পাহাড়</div>
-              <div class="sol-body">
-                <p>sin θ = সাগরে লবণ আছে (লম্ব/অতিভুজ)<br>
-                লম্ব (বিপরীত) = ৫<br>
-                অতিভুজ = ১৩</p>
+              <div class="mini-q-ref">
+                <strong>প্রশ্ন:</strong> ৩:৫ অনুপাতে ৮০ এর মধ্যে ৩ অংশ কত?
               </div>
-              <div class="final-ans">🌊 উত্তর: <sup>5</sup>&frasl;<sub>13</sub></div>
+              <div class="sol-title">🪑 অনুপাত পরিবার</div>
+              <div class="sol-body">
+                <p>মোট ভাগ = ৩+৫ = ৮।<br>
+                ৮ ভাগে ৮০ হলে, ১ ভাগে ১০।<br>
+                ছেলেদের ভাগ ৩, তাই ৩ × ১০ = ৩০।</p>
+              </div>
+              <div class="final-ans">👦 উত্তর: ৩০ টি</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card hidden-flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <span class="topic-badge bg-bij">বীজগণিত (Roots)</span>
+              <h4 class="card-q-title">লুকিয়ে থাকা মূল</h4>
+              <p class="card-q-text">x² - 9x + 20 = 0</p>
+              <p style="font-size:0.9rem;">মূলদ্বয় বা x এর মান কী কী?</p>
+            </div>
+            <div class="flip-card-back">
+              <div class="mini-q-ref">
+                <strong>প্রশ্ন:</strong> x² - 9x + 20 = 0 এর সমাধান?
+              </div>
+              <div class="sol-title">🌱 সমীকরণের সন্তান</div>
+              <div class="sol-body">
+                <p>২০ কে ভাঙলে পাই ৪ ও ৫ (যাদের যোগফল ৯)।<br>
+                উৎপাদক: (x - 4)(x - 5) = 0<br>
+                তাই, x = 4 অথবা x = 5</p>
+              </div>
+              <div class="final-ans">⚡ উত্তর: ৪ এবং ৫</div>
             </div>
           </div>
         </div>
@@ -1029,19 +1158,30 @@
     <!--end-->
 
     <!-- Quiz Start-->
-     <div class="quiz-section" id="quiz-section">
-      <h2 class="section-title"><i class="fa-solid fa-clipboard-question"></i> আপনার সন্তানের গণিতভিত্তিক দক্ষতা টেস্ট (Live)</h2>
+    <div class="quiz-section" id="quiz-section">
+      <h2 class="section-title"><i class="fa-solid fa-clipboard-question"></i> আপনার সন্তানের গণিত দক্ষতা যাচাই (Live Test)</h2>
       <div class="quiz-intro">
-        <p style="color:#64748b;">৫-মিনিটের স্মার্ট মূল্যায়নে জানুন আপনার সন্তানের গণিতের বর্তমান অবস্থা এবং তার জন্য সঠিক টিউশন প্ল্যান।</p>
+        <p style="color:#64748b;">১৫-মিনিটের স্মার্ট মূল্যায়নে জানুন আপনার সন্তানের গণিতের বর্তমান অবস্থা এবং তার জন্য সঠিক টিউশন প্ল্যান।</p>
       </div>
       
-      <select id="quiz-class-selector" class="class-selector" onchange="startQuiz()">
+      <select id="quiz-class-selector" class="class-selector" onchange="showWarning()">
         <option value="" disabled selected>কোন ক্লাসে পড়ে?</option>
         <option value="class6">৬ষ্ঠ শ্রেণী</option>
         <option value="class7">৭ম শ্রেণী</option>
         <option value="class8">৮ম শ্রেণী</option>
         <option value="class9">৯ম/১০ম শ্রেণী</option>
       </select>
+
+      <div id="quiz-warning-msg" style="display:none; background: #fff7ed; border: 1px solid #fdba74; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center; color: #c2410c;">
+        <i class="fa-solid fa-triangle-exclamation" style="font-size: 2rem; margin-bottom: 10px;"></i><br>
+        <strong>সতর্কতা:</strong> কুইজ শুরু করার পর আপনি <strong>১৫ মিনিট</strong> সময় পাবেন।<br> 
+        সময় শেষ হলে অটোমেটিক সাবমিট হয়ে যাবে।<br><br>
+        <button onclick="confirmStartQuiz()" class="btn" style="padding: 10px 30px; background: #ea580c;">পরীক্ষা শুরু করুন</button>
+      </div>
+
+      <div id="quiz-timer-display" style="display:none; text-align: center; margin-bottom: 20px; font-weight: bold; font-size: 1.2rem; color: #ef4444; background: #fee2e2; padding: 10px; border-radius: 8px; border: 1px solid #fca5a5;">
+        <i class="fa-solid fa-stopwatch"></i> সময় বাকি: <span id="time-left">15:00</span>
+      </div>
 
       <div id="quiz-container" class="quiz-container">
         <form id="quiz-form" onsubmit="submitQuiz(event)">
@@ -1054,7 +1194,6 @@
         </form>
       </div>
       
-
       <div id="quiz-result-box">
         <div class="score-circle" id="score-display">0/0</div>
         <div class="result-msg" id="result-msg"></div>
@@ -1066,7 +1205,7 @@
 
         <div id="solution-offer-box" style="margin-top: 25px; padding-top: 20px; border-top: 2px dashed #cbd5e1;">
           <p style="font-weight: bold; color: var(--secondary); margin-bottom: 15px; font-size: 1.05rem;">
-            <i class="fa-solid fa-gift" style="color: #e11d48;"></i> বিস্তারিত সমাধান বা ফ্রি পরামর্শ পেতে আপনার নাম ও নম্বর দিন:
+            <i class="fa-solid fa-gift" style="color: #e11d48;"></i> বিস্তারিত সমাধান বা ফ্রি পরামর্শ পেতে নাম ও নম্বর দিন:
           </p>
 
           <form onsubmit="submitLead(event)" id="lead-form">
@@ -1080,32 +1219,24 @@
               <i class="fa-solid fa-paper-plane"></i> সমাধান ও পরামর্শ চাই
             </button>
           </form>
-
-          <div id="lead-success-msg" style="display: none; margin-top: 15px; text-align: center; background: #dcfce7; padding: 15px; border-radius: 10px; border: 1px solid #86efac;">
-            <p style="color: #166534; font-weight: bold; margin-bottom: 10px; font-size: 1.1rem;">
-              <i class="fa-solid fa-circle-check"></i> দ্রুত আপনার সাথে যোগাযোগ করা হবে ইন শা আল্লাহ।
-            </p>
-            <a href="tel:+8801639498196" class="btn btn-call" style="width: 100%; justify-content: center;">
-              <i class="fa-solid fa-phone"></i> অথবা এখন কল করুন
-            </a>
-          </div>
         </div>
 
-        <div id="reopen-btn-area">
+        <div id="reopen-btn-area" style="display:none; margin-top: 20px;">
           <p style="color: green; font-weight: bold; margin-bottom: 10px;">✅ আপনার রিপোর্ট তৈরি হয়েছে!</p>
           <button onclick="openReport()" class="btn" style="background: var(--secondary); width: 100%; justify-content: center;">
             <i class="fa-solid fa-file-invoice"></i> রিপোর্ট আবার দেখুন
           </button>
         </div>
+        <div style="margin-top: 20px; font-size: 0.9rem; color: #64748b;">
+          অথবা জরুরি প্রয়োজনে: <a href="tel:+8801639498196" style="color: var(--primary); font-weight: bold;">সরাসরি কল করুন</a>
+        </div>
 
         <div id="report-modal" class="modal-overlay">
           <div class="modal-content">
             <button class="modal-close-btn" onclick="closeReport()">&times;</button>
-            
             <div class="modal-header">
               <i class="fa-solid fa-square-poll-vertical"></i> বিস্তারিত রিপোর্ট কার্ড
             </div>
-            
             <div class="modal-body">
               <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 15px;">
                 <h3 id="pop-name" style="margin: 0; color: var(--secondary);"></h3>
@@ -1117,8 +1248,7 @@
               </div>
 
               <h4 style="color: #ef4444; margin-bottom: 15px;">❌ ভুলগুলোর সঠিক সমাধান:</h4>
-              <div id="pop-mistakes">
-                </div>
+              <div id="pop-mistakes"></div>
 
               <div style="background: #eff6ff; padding: 20px; border-radius: 10px; border: 2px solid #bfdbfe; text-align: center; margin-top: 30px;">
                 <h4 style="color: #1e40af; margin-bottom: 5px;">পরামর্শ:</h4>
@@ -1130,11 +1260,8 @@
                 </a>
               </div>
             </div>
+            
           </div>
-        </div>
-
-        <div style="margin-top: 20px; font-size: 0.9rem; color: #64748b;">
-          অথবা জরুরি প্রয়োজনে: <a href="tel:+8801639498196" style="color: var(--primary); font-weight: bold;">সরাসরি কল করুন</a>
         </div>
       </div>
     </div>
@@ -1142,7 +1269,7 @@
     <!-- Plan Start -->
     <div style="margin-bottom: 50px;">
       <h2 class="section-title"><i class="fa-solid fa-layer-group"></i> আপনার সন্তানের জন্য সঠিক কেয়ার প্ল্যান</h2>
-      <p style="text-align: center; color: #64748b; margin-bottom: 30px;">প্রতিটি শিক্ষার্থীর শেখার গতি আলাদা। টেস্টের ফলাফল অনুযায়ী ৩ ধরনের স্পেশাল কেয়ার প্ল্যান তৈরি করেছি—বেসিক কেয়ার, রেগুলার কেয়ার ও অ্যাডভান্সড গাইডলাইন।</p>
+      <p style="text-align: center; color: #64748b; margin-bottom: 30px;">প্রতিটি শিক্ষার্থীর শেখার গতি আলাদা। শিক্ষার্থীদের মেধার ভিত্তিতে ৩ ধরনের স্পেশাল কেয়ার প্ল্যান তৈরি করেছি—বেসিক কেয়ার, রেগুলার কেয়ার ও অ্যাডভান্সড গাইডলাইন।</p>
       
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
         
@@ -1232,192 +1359,199 @@
   <!-- start success story -->
 
   <div class="success-story-section">
-      <h2 class="section-title"><i class="fa-solid fa-graduation-cap"></i> আমার কৃতী শিক্ষার্থীদের সফলতা</h2>
+      <h2 class="section-title"><i class="fa-solid fa-graduation-cap"></i> আমার কৃতী শিক্ষার্থীদের একাংশ</h2>
       <p style="text-align: center; color: #64748b; margin-bottom: 30px;">
         শুধুমাত্র পরীক্ষালব্ধ ফলাফল নয়, গণিতের ভিত মজবুত করাই আমাদের প্রধান লক্ষ্য।
       </p>
 
-      <div class="success-grid" id="success-story-container">
+      <div class="success-carousel-wrap">
+      <button class="nav-btn prev-s-btn" onclick="slideSuccess('left')">
+        <i class="fa-solid fa-angle-left"></i>
+      </button>
+
+      <div class="success-track" id="success-track">
         
-        <div class="story-card-success">
+        <div class="story-card-success" style="border-color: #ef4444;">
           <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">সাদিয়া ইসলাম (SSC ২০২৪)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> ফলাফল: **A+**</p>
-          <p class="story-text">আগে গণিতের সৃজনশীল অংশে দুর্বল ছিল। ৪ মাসের রেগুলার কেয়ারে অনুশীলন বাড়ানোর ফলে SSC পরীক্ষায় গণিতে A+ অর্জন করে।</p>
+          <h3 class="student-name">সাদিয়া ইসলাম</h3>
+          <p class="exam-result">SSC ২০২৪: **A+**</p>
+          <p class="story-text">৪ মাসের রেগুলার কেয়ারে অনুশীলন বাড়ানোর ফলে গণিতে A+ অর্জন করে।</p>
+        </div>
+
+        <div class="story-card-success" style="border-color: #2563eb;">
+          <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
+          <h3 class="student-name">আরাফাত হোসেন</h3>
+          <p class="exam-result">Annual: **Top 5**</p>
+          <p class="story-text">৫৫ নম্বর থেকে ধারাবাহিক প্র্যাকটিসের মাধ্যমে Top 5-এ জায়গা করে নেয়।</p>
+        </div>
+
+        <div class="story-card-success" style="border-color: #ef4444;">
+          <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
+          <h3 class="student-name">মাহিরা তাসনিম</h3>
+          <p class="exam-result">Fail → **A-**</p>
+          <p class="story-text">ফেল করার পর বেসিক কেয়ারে যোগ দিয়ে ফাইনালে A- পায়।</p>
+        </div>
+
+        <div class="story-card-success" style="border-color: #2563eb;">
+          <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
+          <h3 class="student-name">আদনান কবির</h3>
+          <p class="exam-result">MCQ: **২৩/২৫**</p>
+          <p class="story-text">স্পিড টেকনিক শেখানোর পর বোর্ডে MCQ ২৩/২৫ এবং মোট গ্রেড A পায়।</p>
+        </div>
+
+        <div class="story-card-success" style="border-color: #ef4444;">
+          <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
+          <h3 class="student-name">সামিহা হক</h3>
+          <p class="exam-result">Final: **৯২%**</p>
+          <p class="story-text">নিয়মিত ক্লাসের ফলে নম্বর বৃদ্ধি পেয়ে ৯২% অর্জন করে।</p>
         </div>
         
-        <div class="story-card-success">
-          <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">আরাফাত হোসেন (ক্লাস ৯)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> Annual Exam Top 5</p>
-          <p class="story-text">বছরের শুরুতে নম্বর ছিল ৫৫–৬০ এর মধ্যে। ধারাবাহিক প্র্যাকটিসের মাধ্যমে Annual Exam-এ Top 5-এ জায়গা করে নেয়।</p>
+        <div class="story-card-success" style="border-color: #2563eb;">
+           <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">রাফিদ রহমান</h3>
+           <p class="exam-result">Mid Exam: **৮৮**</p>
+           <p class="story-text">৩ মাসে বেসিক শক্ত করে মিড টার্ম পরীক্ষায় ৮৮ পায়।</p>
         </div>
 
-        <div class="story-card-success">
-          <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">মাহিরা তাসনিম (ক্লাস ৮)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> Fail → **A-**</p>
-          <p class="story-text">প্রথম টার্মে গণিতে ফেল করেছিল। বেসিক কেয়ারে যোগ দেওয়ার পর Final Exam-এ A- পায়।</p>
+        <div class="story-card-success" style="border-color: #ef4444;">
+           <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">নুসাইবা খান</h3>
+           <p class="exam-result">Rank: **Top 3**</p>
+           <p class="story-text">গল্প-ভিত্তিক শেখানোর ফলে আত্মবিশ্বাস পায় এবং Top 3-এ স্থান পায়।</p>
         </div>
 
-        <div class="story-card-success hidden-story">
-          <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">আদনান কবির (SSC ২০২৩)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> MCQ ২৩/২৫ (গ্রেড A)</p>
-          <p class="story-text">MCQ-তে নম্বর খুব কম পেত। স্পিড টেকনিক শেখানোর পর বোর্ডে MCQ ২৩/২৫ পায় এবং মোট গ্রেড A।</p>
+        <div class="story-card-success" style="border-color: #2563eb;">
+           <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">ফারহান নওশাদ</h3>
+           <p class="exam-result">SSC ২০২২: **A+**</p>
+           <p class="story-text">দুই বছর প্রস্তুতি নিয়ে ধীরে ধীরে দক্ষতা বাড়িয়ে A+ নিশ্চিত করে।</p>
         </div>
 
-        <div class="story-card-success hidden-story">
-          <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">সামিহা হক (ক্লাস ৭)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> Final Exam **৯২%**</p>
-          <p class="story-text">বছর জুড়ে নিয়মিত ক্লাস করার ফলে প্রতিটি টার্মে নম্বর বৃদ্ধি পেয়ে Final Exam-এ ৯২% অর্জন করে।</p>
+        <div class="story-card-success" style="border-color: #ef4444;">
+           <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">তাহমিদ ইসলাম</h3>
+           <p class="exam-result">Fail → **B+**</p>
+           <p class="story-text">সমস্যা শনাক্ত করে সঠিক রুটিনে আনার পর ফাইনালে B+ পায়।</p>
         </div>
 
-        <div class="story-card-success hidden-story">
-          <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">রাফিদ রহমান (ক্লাস ৬)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> Weak Basic → **Strong**</p>
-          <p class="story-text">যোগ-বিয়োগ, ভগ্নাংশ—সবকিছুতেই সমস্যা ছিল। ৩ মাসে বেসিক শক্ত করে Mid Exam-এ ৮৮ পায়।</p>
+        <div class="story-card-success" style="border-color: #2563eb;">
+           <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">মীম আক্তার</h3>
+           <p class="exam-result">Result: **Topper**</p>
+           <p class="story-text">সঠিক মেন্টরশিপে বার্ষিক পরীক্ষায় ক্লাসে প্রথম হয়।</p>
         </div>
 
-        <div class="story-card-success hidden-story">
-          <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">নুসাইবা খান (ক্লাস ৯)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> স্থান: **Top 3**</p>
-          <p class="story-text">গণিতে ভয় ছিল। গল্প-ভিত্তিক শেখানোর ফলে আত্মবিশ্বাস পায় এবং টার্ম ফাইনালে Top 3-এ স্থান পায়।</p>
+        <div class="story-card-success" style="border-color: #ef4444;">
+           <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">সানজিদা রহমান</h3>
+           <p class="exam-result">A- → **A+**</p>
+           <p class="story-text">জ্যামিতিতে দুর্বলতা ছিল, রিভিশনের পর A+ পায়।</p>
         </div>
 
-        <div class="story-card-success hidden-story">
-          <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">ফারহান নওশাদ (SSC ২০২২)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> ফলাফল: **A+**</p>
-          <p class="story-text">দুই বছর প্রস্তুতি নিয়ে ধীরে ধীরে দক্ষতা বাড়িয়ে বোর্ড পরীক্ষায় A+ নিশ্চিত করে।</p>
+        <div class="story-card-success" style="border-color: #2563eb;">
+           <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">আরমান শাহ</h3>
+           <p class="exam-result">SSC Score: **৯০+**</p>
+           <p class="story-text">পরীক্ষার ৩ মাস আগে দুর্বল অধ্যায়গুলো ঠিক করে ৯০+ পায়।</p>
         </div>
 
-        <div class="story-card-success hidden-story">
-          <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">তাহমিদ ইসলাম (ক্লাস ৮)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> Fail → **B+**</p>
-          <p class="story-text">হঠাৎ রেজাল্ট অনেক খারাপ হয়ে যায়। সমস্যা শনাক্ত করে সঠিক রুটিনে আনা হয়। Final Exam-এ B+।</p>
+        <div class="story-card-success" style="border-color: #ef4444;">
+           <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">রাইয়ান হক</h3>
+           <p class="exam-result">Rank: **Top 3**</p>
+           <p class="story-text">Advanced Guideline পেয়ে Top 10 থেকে Top 3-এ উঠে আসে।</p>
         </div>
 
-        <div class="story-card-success hidden-story">
-          <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">মীম আক্তার (ক্লাস ৫)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> **Class Topper**</p>
-          <p class="story-text">প্রতিযোগিতামূলক মাইন্ডসেট ছিল। সঠিক মেন্টরশিপে Annual Exam-এ Class Topper হয়।</p>
+        <div class="story-card-success" style="border-color: #2563eb;">
+           <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">তাহসিন তৌহিদ</h3>
+           <p class="exam-result">Score: **৮৯**</p>
+           <p class="story-text">গণিতে অনিচ্ছা ছিল, নিয়মিত গাইডলাইনে ৮৯ নম্বর পায়।</p>
         </div>
 
-        <div class="story-card-success hidden-story">
-          <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">সানজিদা রহমান (ক্লাস ৭)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> A- → **A+**</p>
-          <p class="story-text">শতকরা ও জ্যামিতিতে দুর্বলতা ছিল। Targeted Revision-এর ফলে টার্ম ফাইনালে A+ পায়।</p>
+        <div class="story-card-success" style="border-color: #ef4444;">
+           <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">ফারজানা ইয়াসমিন</h3>
+           <p class="exam-result">Crash Course: **A+**</p>
+           <p class="story-text">শেষ মুহূর্তে Crash Program নিয়ে কনসেপ্ট ক্লিয়ার করে A+ পায়।</p>
         </div>
 
-        <div class="story-card-success hidden-story">
-          <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">আরমান শাহ (ক্লাস ১০)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> SSC-তে **৯০+**</p>
-          <p class="story-text">বোর্ড পরীক্ষার ৩ মাস আগে দুর্বল অধ্যায়গুলো ঠিক করে SSC-তে ৯০+ পায়।</p>
+        <div class="story-card-success" style="border-color: #2563eb;">
+           <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">জয় আহমেদ</h3>
+           <p class="exam-result">Final: **৯০%**</p>
+           <p class="story-text">ভগ্নাংশ ও লসাগুতে সমস্যা ছিল, বেসিক ঠিক করে ৯০% পায়।</p>
         </div>
 
-        <div class="story-card-success hidden-story">
-          <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">রাইয়ান হক (ক্লাস ৯)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> Top 10 → **Top 3**</p>
-          <p class="story-text">আগে Top 10 ছিল। Advanced Guideline পেয়ে Annual Exam-এ উঠে আসে Top 3-এ।</p>
+        <div class="story-card-success" style="border-color: #ef4444;">
+           <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">আরোহী তানজিম</h3>
+           <p class="exam-result">Annual: **A+**</p>
+           <p class="story-text">৫ মাসের গাইডলাইনে মাঝামাঝি রেজাল্ট থেকে A+ এ উন্নীত হয়।</p>
         </div>
 
-        <div class="story-card-success hidden-story">
-          <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">তাহসিন তৌহিদ (ক্লাস ৮)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> Final Exam **৮৯**</p>
-          <p class="story-text">গণিতে অনিচ্ছা ছিল। নিয়মিত গাইডলাইনে আগ্রহ ফিরে পায় এবং Final Exam-এ ৮৯।</p>
+        <div class="story-card-success" style="border-color: #2563eb;">
+           <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">মুশফিক রহমান</h3>
+           <p class="exam-result">Test: **১০০%**</p>
+           <p class="story-text">ভুল ঠিক করার মাধ্যমে মাসিক পরীক্ষায় ১০০% নম্বর পায়।</p>
         </div>
 
-        <div class="story-card-success hidden-story">
-          <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">ফারজানা ইয়াসমিন (SSC)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> ফলাফল: **A+**</p>
-          <p class="story-text">শেষ মুহূর্তে Crash Program নিয়ে কনসেপ্ট ক্লিয়ার করে বোর্ডে A+ পায়।</p>
+        <div class="story-card-success" style="border-color: #ef4444;">
+           <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">হাবিবা আফরোজ</h3>
+           <p class="exam-result">Algebra: **Best**</p>
+           <p class="story-text">Story Method-এ শেখার পর বীজগণিতে এখন ক্লাসে সেরা।</p>
         </div>
 
-        <div class="story-card-success hidden-story">
-          <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">জয় আহমেদ (ক্লাস ৬)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> Final Exam **৯০%**</p>
-          <p class="story-text">ভগ্নাংশ ও LCM/GCD-তে সমস্যা ছিল। বেসিক তৈরি করে Final Exam-এ ৯০% স্কোর।</p>
+        <div class="story-card-success" style="border-color: #2563eb;">
+           <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">প্রান্ত দাস</h3>
+           <p class="exam-result">Mock Test: **Topper**</p>
+           <p class="story-text">বোর্ডের আগে নেওয়া মক পরীক্ষায় গণিতে Topper হয়।</p>
         </div>
 
-        <div class="story-card-success hidden-story">
-          <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">আরোহী তানজিম (ক্লাস ৭)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> Annual Exam **A+**</p>
-          <p class="story-text">মাসিক টেস্টে সবসময় মাঝামাঝি ছিল। ৫ মাসের গাইডলাইনে Annual Exam-এ A+।</p>
+        <div class="story-card-success" style="border-color: #ef4444;">
+           <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">আফসানা নূর</h3>
+           <p class="exam-result">Fail → **A**</p>
+           <p class="story-text">১–১ মেন্টরশিপে ৪ মাসে A পেয়ে সবাইকে অবাক করে দেয়।</p>
         </div>
 
-        <div class="story-card-success hidden-story">
-          <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">মুশফিক রহমান (ক্লাস ৮)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> Class Test **১০০%**</p>
-          <p class="story-text">প্র্যাকটিস শিট ও ভুল ঠিক করার মাধ্যমে মাসিক পরীক্ষায় ১০০% পায়।</p>
+        <div class="story-card-success" style="border-color: #2563eb;">
+           <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">সাকিব রশীদ</h3>
+           <p class="exam-result">Final: **৯৫**</p>
+           <p class="story-text">প্রতি সপ্তাহে Improvement Tracking করার ফলে ৯৫ নম্বর পায়।</p>
         </div>
 
-        <div class="story-card-success hidden-story">
-          <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">হাবিবা আফরোজ (ক্লাস ৯)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> ক্লাসে **সেরা**</p>
-          <p class="story-text">বীজগণিত ভয় লাগত। Story Method শেখানোর পর Algebra-তে এখন ক্লাসে সেরা।</p>
+        <div class="story-card-success" style="border-color: #ef4444;">
+           <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">হুমায়রা হক</h3>
+           <p class="exam-result">Rank: **Top 5**</p>
+           <p class="story-text">পুরো বছর জুড়ে টেস্টে ধারাবাহিকভাবে Top 5 ধরে রাখে।</p>
         </div>
 
-        <div class="story-card-success hidden-story">
-          <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">প্রান্ত দাস (ক্লাস ১০)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> SSC Mock **Topper**</p>
-          <p class="story-text">বোর্ডের আগে নেওয়া মক পরীক্ষায় গণিতে Topper হয়।</p>
+        <div class="story-card-success" style="border-color: #2563eb;">
+           <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">আরিয়া ইসলাম</h3>
+           <p class="exam-result">Annual: **৮৭**</p>
+           <p class="story-text">গণিতভীতি কাটিয়ে আত্মবিশ্বাস ফিরে পায় এবং ৮৭ নম্বর পায়।</p>
         </div>
 
-        <div class="story-card-success hidden-story">
-          <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">আফসানা নূর (ক্লাস ৮)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> Fail → **A**</p>
-          <p class="story-text">গণিতে একাধিকবার ফেল করছিল। ১–১ মেন্টরশিপে ৪ মাসে A পেয়ে সবাইকে অবাক করে।</p>
-        </div>
-
-        <div class="story-card-success hidden-story">
-          <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">সাকিব রশীদ (ক্লাস ৫)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> Final Exam **৯৫**</p>
-          <p class="story-text">প্রতি সপ্তাহে Improvement Tracking করার ফলে Final Exam-এ ৯৫ পায়।</p>
-        </div>
-
-        <div class="story-card-success hidden-story">
-          <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">হুমায়রা হক (ক্লাস ৭)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> Consistent **Top 5**</p>
-          <p class="story-text">পুরো বছর জুড়ে টেস্টে Top 5 ধরে রাখে।</p>
-        </div>
-
-        <div class="story-card-success hidden-story">
-          <div class="icon-box blue-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">আরিয়া ইসলাম (ক্লাস ৯)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> Annual Exam **৮৭**</p>
-          <p class="story-text">গণিতভীতি এতটাই বেশি ছিল যে পরীক্ষায় লিখতেই পারত না। বেসিক কেয়ার নিয়ে ধীরে ধীরে আত্মবিশ্বাস ফিরে পায় এবং Annual Exam-এ ৮৭ পায়।</p>
-        </div>
-
-        <div class="story-card-success hidden-story">
-          <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
-          <h3 class="student-name">ইয়াসিন মাহমুদ (ক্লাস ৮)</h3>
-          <p class="exam-result"><i class="fa-solid fa-square-check"></i> A to **A+**</p>
-          <p class="story-text">A গ্রেডে আটকে ছিল। Advanced Practice-এ Final Exam-এ A+ অর্জন করে।</p>
+        <div class="story-card-success" style="border-color: #ef4444;">
+           <div class="icon-box red-bg"><i class="fa-solid fa-user-graduate"></i></div>
+           <h3 class="student-name">ইয়াসিন মাহমুদ</h3>
+           <p class="exam-result">A → **A+**</p>
+           <p class="story-text">Advanced Practice-এর মাধ্যমে ফাইনালে A+ অর্জন করে।</p>
         </div>
 
       </div>
-      <p style="text-align: center; color: #94a3b8; font-size: 0.85rem; margin-top: 10px;">
-        <i class="fa-solid fa-arrows-up-down"></i> আরও দেখতে বক্সের ভেতরে স্ক্রল করুন
-      </p>
+
+      <button class="nav-btn next-s-btn" onclick="slideSuccess('right')">
+        <i class="fa-solid fa-angle-right"></i>
+      </button>
+    </div>
 
     </div>
 
@@ -1480,21 +1614,83 @@
       </div>
 
     </div>
-
+    <!--FQA Start-->
     <h2 class="section-title">সাধারণ কিছু প্রশ্ন (FAQ)</h2>
     <div class="faq-section">
+      
       <details class="faq-item">
-        <summary>সপ্তাহে কতদিন পড়ানো হয়?</summary>
-        <p>সাধারণত সপ্তাহে ৩ দিন অথবা ৪ দিন পড়ানো হয়। তবে আলোচনার মাধ্যমে সময় বাড়ানো যেতে পারে।</p>
+        <summary>⭐ ১) ক্লাস কীভাবে নেওয়া হয়?</summary>
+        <div style="padding: 0 20px 20px; color: #64748b; font-size: 0.95rem; border-top: 1px solid #f1f5f9; margin-top: 10px; padding-top: 10px;">
+          <p style="margin-bottom: 10px;">ক্লাস সম্পূর্ণ ১-জন শিক্ষার্থীকে কেন্দ্র করে <strong>(1-to-1)</strong> নেওয়া হয়।</p>
+          <p style="font-weight: bold; margin-bottom: 5px;">প্রতিটি সেশন যেভাবে সাজানো:</p>
+          <ul style="padding-left: 20px; margin-bottom: 10px;">
+            <li>প্রথমে Concept Explain</li>
+            <li>তারপর Example Practice</li>
+            <li>শেষে Exam-Style Questions</li>
+          </ul>
+          <p>স্টেপ-বাই-স্টেপ সমাধান এবং প্রয়োজনে ডিজিটাল ভিজ্যুয়াল ব্যবহার করা হয় যাতে শিক্ষার্থী খুব সহজে বুঝতে পারে।</p>
+        </div>
       </details>
+
       <details class="faq-item">
-        <summary>বাসায় গিয়ে পড়ানোর সুবিধা আছে কি?</summary>
-        <p>হ্যাঁ, আমি শিক্ষার্থীর বাসায় গিয়ে প্রাইভেট পড়িয়ে থাকি। তবে দূরত্ব এবং সময়ের ওপর নির্ভর করে।</p>
+        <summary>⭐ ২) ফি কত?</summary>
+        <div style="padding: 0 20px 20px; color: #64748b; font-size: 0.95rem; border-top: 1px solid #f1f5f9; margin-top: 10px; padding-top: 10px;">
+          <p style="margin-bottom: 5px;">ফি নির্দিষ্ট নয়, এটি নির্ভর করে:</p>
+          <ul style="padding-left: 20px; margin-bottom: 10px;">
+            <li>শিক্ষার্থীর বর্তমান ক্লাসের ওপর</li>
+            <li>বেসিক শক্ত নাকি দুর্বল তার ওপর</li>
+            <li>সপ্তাহে কয়দিন ক্লাস প্রয়োজন তার ওপর</li>
+          </ul>
+          <p>কুইজ বা টেস্ট সম্পন্ন হলে রিপোর্ট অনুযায়ী সঠিক প্ল্যান ও ফি জানানো হয়। এতে অভিভাবক প্রয়োজনবিহীন অতিরিক্ত খরচ করেন না।</p>
+        </div>
       </details>
+
       <details class="faq-item">
-        <summary>বেতন বা সম্মানী কত?</summary>
-        <p>এটি ক্লাস এবং সপ্তাহে কতদিন পড়াবো তার ওপর নির্ভর করে। কল করে বিস্তারিত আলোচনা করার অনুরোধ রইল।</p>
+        <summary>⭐ ৩) গ্যারান্টি কী?</summary>
+        <div style="padding: 0 20px 20px; color: #64748b; font-size: 0.95rem; border-top: 1px solid #f1f5f9; margin-top: 10px; padding-top: 10px;">
+          <p style="margin-bottom: 10px;">আমি ফলাফলে উন্নতির গ্যারান্টি দিই, শুধু নম্বরের নয়। কারণ নম্বর প্রশ্নের মানের উপর নির্ভর করে, কিন্তু আমি নিশ্চিত করি:</p>
+          <ul style="padding-left: 20px; margin-bottom: 10px;">
+            <li>বেসিক উন্নতি</li>
+            <li>সৃজনশীল লেখার দক্ষতা</li>
+            <li>ভুল কমানো</li>
+            <li>সময় বাঁচানোর কৌশল</li>
+          </ul>
+          <p>শিক্ষার্থী <strong>৩–৬ সপ্তাহের</strong> মধ্যেই নিজের উন্নতি টের পায়।</p>
+        </div>
       </details>
+
+      <details class="faq-item">
+        <summary>⭐ ৪) হোমওয়ার্ক কীভাবে মনিটর করা হয়?</summary>
+        <div style="padding: 0 20px 20px; color: #64748b; font-size: 0.95rem; border-top: 1px solid #f1f5f9; margin-top: 10px; padding-top: 10px;">
+          <ul style="padding-left: 20px;">
+            <li>প্রতিটি অধ্যায়ের জন্য আলাদা <strong>Practice Sheet</strong> দেওয়া হয়।</li>
+            <li>শিক্ষার্থীর ভুলগুলো আমি নিজে বিশ্লেষণ করি।</li>
+            <li>সপ্তাহে ১ বার <strong>Progress Review Call</strong> করা হয়।</li>
+            <li>অভিভাবককে সাপ্তাহিক রিপোর্ট পাঠানো হয়।</li>
+          </ul>
+          <p style="margin-top: 10px;">এভাবে শিক্ষার্থী শেখে নিয়মিত, আর অভিভাবক থাকেন পুরোপুরি আপডেটেড।</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>⭐ ৫) যোগাযোগ কিভাবে?</summary>
+        <div style="padding: 0 20px 20px; color: #64748b; font-size: 0.95rem; border-top: 1px solid #f1f5f9; margin-top: 10px; padding-top: 10px;">
+          <p style="margin-bottom: 8px;">
+            <i class="fa-solid fa-phone-volume" style="color: var(--primary);"></i> 
+            <strong>ফোন:</strong> <a href="tel:+8801639498196" style="text-decoration: none; color: var(--secondary); font-weight: bold;">01639-498196</a>
+          </p>
+          <p style="margin-bottom: 8px;">
+            <i class="fa-brands fa-whatsapp" style="color: var(--whatsapp);"></i> 
+            <strong>WhatsApp:</strong> <a href="https://wa.me/8801639498196" style="text-decoration: none; color: var(--secondary); font-weight: bold;">wa.me/8801639498196</a>
+          </p>
+          <p style="margin-bottom: 15px;">
+            <i class="fa-regular fa-clock" style="color: var(--accent);"></i> 
+            <strong>সময়:</strong> বাদ ফজর – রাত ১০ টা পর্যন্ত (প্রতিদিন)
+          </p>
+          <p>অথবা নিচের ফর্মের মাধ্যমেও বার্তা দিতে পারবেন।</p>
+        </div>
+      </details>
+
     </div>
 
     <div class="contact-section">
@@ -1569,7 +1765,7 @@
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> পাঠাচ্ছি...';
         
         const formData = { 
-            sheet_name: "Sheet1", // এই লাইনটি আপনার কোডে মিসিং ছিল
+            sheet_name: "Sheet1", 
             name: document.getElementById('name').value, 
             child_class: document.getElementById('child_class').value, 
             phone: document.getElementById('phone').value, 
@@ -1580,219 +1776,196 @@
         .then(() => { document.getElementById('form-msg').style.display = 'block'; e.target.reset(); btn.disabled = false; btn.innerText = originalText; setTimeout(() => { document.getElementById('form-msg').style.display = 'none'; }, 5000); })
         .catch(error => { alert("সমস্যা হয়েছে! কল করুন।"); btn.disabled = false; btn.innerText = originalText; });
     }
-    //-------------------------------------------------------
 
+    // --- QUIZ DATA & LOGIC START ---
     
-    // --- QUIZ LOGIC (20 Hard Basic Questions/Class) ---
+    // গ্লোবাল ভেরিয়েবল
+    let currentQuestions = [];
+    let mistakeDetails = ""; 
+    let mistakeHTML = ""; 
+    let timerInterval;
+    let timeLeft = 900; // ১৫ মিনিট = ৯০০ সেকেন্ড
+
+    // প্রশ্নাবলি (ক্লাস ৬, ৭, ৮, ৯-১০)
     const quizData = {
       "class6": [
-        { q: "১. সবচেয়ে ছোট মৌলিক সংখ্যা কোনটি?", opts: ["১", "২", "৩", "০"], a: 1 },
-        { q: "২. ১০ এর ১/২ অংশের সাথে ৫ যোগ করলে কত?", opts: ["১০", "১৫", "২০", "৫"], a: 0 },
-        { q: "৩. ১ বিলিয়ন = কত কোটি?", opts: ["১০", "১০০", "১০০০", "৫০"], a: 1 },
-        { q: "৪. সমকোণী ত্রিভুজের একটি কোণ ৯০° হলে বাকি দুটির সমষ্টি কত?", opts: ["১৮০°", "৯০°", "৪৫°", "৬০°"], a: 1 },
-        { q: "৫. ০.৫ এর শতকরা রূপ কত?", opts: ["৫%", "৫০%", "০.০৫%", "৫০০%"], a: 1 },
-        { q: "৬. ১ থেকে ১০ এর মধ্যে কয়টি মৌলিক সংখ্যা?", opts: ["৩", "৪", "৫", "২"], a: 1 },
-        { q: "৭. গ.সা.গু এর পূর্ণরূপ কী?", opts: ["গরিষ্ঠ সাধারণ গুণনীয়ক", "গড় সাধারণ গুণিতক", "গরিষ্ঠ সাধারণ গুণিতক", "লঘিষ্ঠ সাধারণ গুণনীয়ক"], a: 0 },
-        { q: "৮. ভাজক ১০, ভাগফল ৫, ভাগশেষ ২ হলে ভাজ্য কত?", opts: ["৫০", "৫২", "২০", "১২"], a: 1 },
-        { q: "৯. চতুর্ভুজের চার কোণের সমষ্টি?", opts: ["১৮০°", "৩৬০°", "৯০°", "২৭০°"], a: 1 },
-        { q: "১০. কোনটি প্রকৃত ভগ্নাংশ?", opts: ["৩/২", "৫/৪", "২/৩", "৭/৩"], a: 2 },
-        { q: "১১. ১ হালি কলার দাম ২০ টাকা হলে ৩টির দাম কত?", opts: ["১০", "১৫", "১৮", "১২"], a: 1 },
-        { q: "১২. সরল কোণের মান কত?", opts: ["৯০°", "১৮০°", "৩৬০°", "০°"], a: 1 },
-        { q: "১৩. কোন সংখ্যাটি ৩ দ্বারা বিভাজ্য?", opts: ["১২৪", "১২৩", "১০০", "২০"], a: 1 },
-        { q: "১৪. ৫ এর ৩য় গুণিতক কোনটি?", opts: ["১০", "১৫", "২০", "৫"], a: 1 },
-        { q: "১৫. ১ ঘন্টা = কত সেকেন্ড?", opts: ["৩৬০০", "৬০", "১২০", "২৪০০"], a: 0 },
-        { q: "১৬. ত্রিভুজের ক্ষেত্রফল?", opts: ["ভূমি x উচ্চতা", "০.৫ x ভূমি x উচ্চতা", "দৈর্ঘ্য x প্রস্থ", "কোনোটিই না"], a: 1 },
-        { q: "১৭. কোনটি বৃহত্তম? ০.১, ০.০১, ০.০০১, ০.২", opts: ["০.১", "০.০১", "০.০০১", "০.২"], a: 3 },
-        { q: "১৮. ১ কিলোমিটার = কত মিটার?", opts: ["১০০", "১০০০", "১০", "৫০০"], a: 1 },
-        { q: "১৯. ১০০ টাকার ২৫% কত?", opts: ["২৫", "২০", "৫০", "১০০"], a: 0 },
-        { q: "২০. -৫ এর পরম মান কত?", opts: ["-৫", "০", "৫", "১০"], a: 2 }
+        { q: "১) ৭২৬ সংখ্যায় ২ এর মান কত?", opts: ["২", "২০", "২০০", "২০০০"], a: 1 },
+        { q: "২) নিচের কোনটি জোড় সংখ্যা?", opts: ["৩৭", "৪৮", "৫৩", "৭১"], a: 1 },
+        { q: "৩) 3/5 + 1/5 = ?", opts: ["2/5", "3/10", "4/5", "1"], a: 2 },
+        { q: "৪) ১ ঘণ্টা = কত মিনিট?", opts: ["৩০", "৯০", "৪৫", "৬০"], a: 3 },
+        { q: "৫) x + 5 = 12 হলে x = ?", opts: ["৫", "৭", "৯", "১২"], a: 1 },
+        { q: "৬) দৈর্ঘ্য ৮ সেমি ও প্রস্থ ৩ সেমি হলে পরিসীমা কত?", opts: ["১১ সেমি", "১৬ সেমি", "২২ সেমি", "২৬ সেমি"], a: 2 },
+        { q: "৭) ২০% এর ভগ্নাংশ রূপ কোনটি?", opts: ["1/4", "1/5", "1/2", "2/5"], a: 1 },
+        { q: "৮) 3/4 − 1/8 = ?", opts: ["1/2", "5/8", "3/8", "7/8"], a: 1 },
+        { q: "৯) রাহিমের কাছে ৪৮টি আম। করিমের কাছে রাহিমের দ্বিগুণ। করিমের কাছে কত?", opts: ["৬০", "৮০", "৯৬", "৭২"], a: 2 },
+        { q: "১০) একটি সংখ্যার 35% = 70 হলে সংখ্যাটি কত?", opts: ["২০০", "১৬০", "২২০", "১৮০"], a: 0 },
+        { q: "১১) ২ : ৫ = ? : ২০", opts: ["৪", "৬", "৮", "১০"], a: 2 },
+        { q: "১২) ১ লিটার = কত ঘন সেন্টিমিটার (cm³)?", opts: ["১০০", "১০০০", "১০,০০০", "১,০০,০০০"], a: 1 },
+        { q: "১৩) ত্রিভুজের দুটি বাহু ৬ ও ৮ সেমি। তৃতীয় বাহুর সর্বোচ্চ মান কত হতে পারে?", opts: ["১০", "১২", "১৩", "১৫"], a: 2 },
+        { q: "১৪) 2x − 7 = 15 হলে x = ?", opts: ["৮", "১১", "৬", "১২"], a: 1 },
+        { q: "১৫) 0.625 এর ভগ্নাংশ রূপ কী?", opts: ["3/4", "5/8", "2/5", "7/8"], a: 1 },
+        { q: "১৬) তিনটি সংখ্যার অনুপাত ২ : ৩ : ৫ এবং যোগফল ১০০। সর্বোচ্চ সংখ্যাটি কত?", opts: ["৩০", "৪০", "৫০", "৬০"], a: 2 },
+        { q: "১৭) আয়তক্ষেত্রের ক্ষেত্রফল ৮৪ বর্গসেমি। দৈর্ঘ্য = প্রস্থের ৩ গুণ। প্রস্থ কত?", opts: ["৪ সেমি", "৫ সেমি", "৫.২৯ সেমি", "৬ সেমি"], a: 2 },
+        { q: "১৮) 4/7 এর 35% কত?", opts: ["0.1", "0.2", "0.4", "0.5"], a: 1 },
+        { q: "১৯) একটি সংখ্যার 15% = 27 হলে সংখ্যাটির 40% কত?", opts: ["৫৪", "৬৩", "৭২", "৮০"], a: 2 },
+        { q: "২০) A, B, C এর গড় বয়স ১২ বছর। A=10, B=14 হলে C এর বয়স কত?", opts: ["১০", "১২", "১৪", "১৬"], a: 1 }
       ],
       "class7": [
-        { q: "১. (-৫) + (+২) = ?", opts: ["-৩", "-৭", "+৩", "৭"], a: 0 },
-        { q: "২. (-৩) x (-৪) = ?", opts: ["-১২", "১২", "৭", "-৭"], a: 1 },
-        { q: "৩. a^0 = ?", opts: ["0", "1", "a", "undefined"], a: 1 },
-        { q: "৪. ত্রিভুজের তিন কোণের সমষ্টি?", opts: ["৯০°", "১৮০°", "৩৬০°", "১০০°"], a: 1 },
-        { q: "৫. (a+b)^2 এর সূত্র কোনটি?", opts: ["a^2+b^2", "a^2+2ab+b^2", "a^2-2ab+b^2", "2ab"], a: 1 },
-        { q: "৬. কোন সংখ্যাকে ০ দিয়ে ভাগ করলে কী হয়?", opts: ["০", "১", "অসংজ্ঞায়িত", "ওই সংখ্যা"], a: 2 },
-        { q: "৭. সম্পূরক কোণের সমষ্টি কত?", opts: ["৯০°", "১৮০°", "৩৬০°", "৪৫°"], a: 1 },
-        { q: "৮. ১ হেক্টর = কত একর (প্রায়)?", opts: ["২.৪৭", "১.৫", "৩.৫", "২.০"], a: 0 },
-        { q: "৯. ২x + ৩ = ৯ হলে x = ?", opts: ["২", "৩", "৪", "১"], a: 1 },
-        { q: "১০. ৩:৪ এর ব্যস্ত অনুপাত?", opts: ["৪:৩", "৩:৪", "৬:৮", "৯:১২"], a: 0 },
-        { q: "১১. মূলদ সংখ্যা কোনটি?", opts: ["√2", "√3", "√4", "π"], a: 2 },
-        { q: "১২. বৃত্তের পরিধি ও ব্যাসের অনুপাত?", opts: ["π (পাই)", "২", "১", "৪"], a: 0 },
-        { q: "১৩. সামান্তরিকের ক্ষেত্রফল?", opts: ["ভূমি x উচ্চতা", "১/২ x ভূমি x উচ্চতা", "দৈর্ঘ্য x প্রস্থ", "বাহু^২"], a: 0 },
-        { q: "১৪. x^2 - y^2 = ?", opts: ["(x-y)^2", "(x+y)(x-y)", "x^2+y^2", "xy"], a: 1 },
-        { q: "১৫. ৫ জন লোক একটি কাজ ১০ দিনে করে, ১ জন কত দিনে করবে?", opts: ["২", "৫০", "৫", "২০"], a: 1 },
-        { q: "১৬. বৃহত্তম ঋনাত্মক পূর্ণসংখ্যা?", opts: ["-১", "-১০০", "-৯৯", "০"], a: 0 },
-        { q: "১৭. পূরক কোণের সমষ্টি কত?", opts: ["৯০°", "১৮০°", "৩৬০°", "৪৫°"], a: 0 },
-        { q: "১৮. ১ ইঞ্চি = কত সে.মি.?", opts: ["২.৫৪", "১.৫৪", "৩.৫৪", "২.০০"], a: 0 },
-        { q: "১৯. লাভ = ?", opts: ["ক্রয় - বিক্রয়", "বিক্রয় - ক্রয়", "আসল - সুদ", "কোনোটিই না"], a: 1 },
-        { q: "২০. (-১)^৩ = ?", opts: ["১", "-১", "৩", "-৩"], a: 1 }
+        { q: "১) −5 + 12 = ?", opts: ["5", "7", "−7", "17"], a: 1 },
+        { q: "২) 3/4 এবং 1/6 এর যোগফল কত?", opts: ["5/6", "11/12", "7/12", "13/12"], a: 1 },
+        { q: "৩) 2³ এর মান কত?", opts: ["৬", "৮", "৪", "৯"], a: 1 },
+        { q: "৪) নিচের কোনটি মৌলিক সংখ্যা?", opts: ["২১", "১৫", "১৯", "২৫"], a: 2 },
+        { q: "৫) 0.09 এর ভগ্নাংশ রূপ কোনটি?", opts: ["9/10", "9/100", "1/9", "3/100"], a: 1 },
+        { q: "৬) √49 এর মান কত?", opts: ["৭", "৯", "৬", "৪"], a: 0 },
+        { q: "৭) ১৮ ও ২৪ এর গ.সা.গু কত?", opts: ["২", "৩", "৬", "১২"], a: 2 },
+        { q: "৮) 36 ও 48 এর ল.সা.গু কত?", opts: ["48", "72", "144", "96"], a: 3 },
+        { q: "৯) x = 5 হলে 3x − 4 এর মান কত?", opts: ["১১", "১২", "১৩", "১৪"], a: 2 },
+        { q: "১০) একটি সংখ্যাকে ২৫% বাড়ালে নতুন সংখ্যা হয় ৪০। মূল সংখ্যা কত?", opts: ["৩০", "৩২", "৩৫", "২৫"], a: 1 },
+        { q: "১১) নিম্নের কোনটি অমূলদ সংখ্যা?", opts: ["0.5", "√9", "√7", "7/2"], a: 2 },
+        { q: "১২) দুটি সংখ্যার অনুপাত ৩ : ৪ এবং বড় সংখ্যাটি ২০। ছোট সংখ্যাটি কত?", opts: ["১২", "১৫", "১৬", "১০"], a: 1 },
+        { q: "১৩) −3 × (−7) = ?", opts: ["−২১", "২১", "১০", "−১০"], a: 1 },
+        { q: "১৪) 2/3 ÷ 4/5 = ?", opts: ["8/15", "5/6", "3/10", "15/8"], a: 1 },
+        { q: "১৫) √(50) এর সরলতম রূপ কোনটি?", opts: ["5√2", "2√5", "√25", "√10"], a: 0 },
+        { q: "১৬) তিনটি সংখ্যার ল.সা.গু = 180 এবং গ.সা.গু = 6। একটি সংখ্যা ৩০ হলে দ্বিতীয় সংখ্যাটি কোনটি হতে পারে?", opts: ["১৮", "২৪", "৪৮", "১২"], a: 0 }, // C রাখলাম
+        { q: "১৭) 5x + 7 = 37 হলে x = ?", opts: ["৪", "৫", "৬", "৭"], a: 2 },
+        { q: "১৮) 0.045 কে বৈজ্ঞানিক পদ্ধতিতে প্রকাশ করলে কী হবে?", opts: ["4.5 × 10⁻²", "4.5 × 10⁻³", "45 × 10⁻³", "0.45 × 10⁻¹"], a: 0 },
+        { q: "১৯) একটি ত্রিভুজের বাহুগুলো ৮, ১৫ ও x। ত্রিভুজটি গঠিত হওয়ার জন্য x এর মান কত হতে পারে?", opts: ["৫", "৭", "২০", "৩০"], a: 2 },
+        { q: "২০) রফিক, করিম ও জহিরের বয়সের অনুপাত ২ : ৩ : ৪। তিনজনের গড় বয়স ১৮ বছর। জহিরের বয়স কত?", opts: ["২৪", "২৮", "৩০", "৩২"], a: 0 }
       ],
       "class8": [
-        { q: "১. পিথাগোরাসের উপপাদ্য কোন ত্রিভুজে খাটে?", opts: ["সমবাহু", "সমকোণী", "স্থূলকোণী", "সূক্ষ্মকোণী"], a: 1 },
-        { q: "২. (a+b)^2 - (a-b)^2 = ?", opts: ["2(a^2+b^2)", "4ab", "2ab", "a^2+b^2"], a: 1 },
-        { q: "৩. বৃত্তের ব্যাস ব্যাসার্ধের কত গুণ?", opts: ["অর্ধেক", "দ্বিগুণ", "সমান", "তিনগুণ"], a: 1 },
-        { q: "৪. সেট প্রকাশের পদ্ধতি কয়টি?", opts: ["১", "২", "৩", "৪"], a: 1 },
-        { q: "৫. ১ থেকে ১০০ পর্যন্ত মৌলিক সংখ্যা কয়টি?", opts: ["২৫", "৩০", "২০", "১৫"], a: 0 },
-        { q: "৬. সুষম বহুভুজের বহিঃস্থ কোণ ৩৬° হলে বাহু কয়টি?", opts: ["৮", "৯", "১০", "১২"], a: 2 },
-        { q: "৭. মুনাফা-আসল (A) = ?", opts: ["P(1+nr)", "Pnr", "I+P", "P/I"], a: 2 },
-        { q: "৮. x + 1/x = 2 হলে x = ?", opts: ["0", "1", "2", "-1"], a: 1 },
-        { q: "৯. অমূলদ সংখ্যা কোনটি?", opts: ["০", "১", "√২", "√৯"], a: 2 },
-        { q: "১০. ট্রাপিজিয়ামের ক্ষেত্রফল?", opts: ["০.৫ x (সমান্তরাল বাহুর যোগফল) x উচ্চতা", "ভূমি x উচ্চতা", "দৈর্ঘ্য x প্রস্থ", "কোনোটিই না"], a: 0 },
-        { q: "১১. ৩, ৫, ৭... ১০ম পদ কত?", opts: ["১৯", "২১", "২৩", "২৫"], a: 1 },
-        { q: "১২. রম্বসের কর্ণদ্বয় কত ডিগ্রিতে ছেদ করে?", opts: ["৪৫", "৬০", "৯০", "১৮০"], a: 2 },
-        { q: "১৩. মধ্যক নির্ণয়ে উপাত্ত কী করতে হয়?", opts: ["যোগ", "বিয়োগ", "সাজাতে হয়", "গুণ"], a: 2 },
-        { q: "১৪. ৫০০ টাকার ৫% হার মুনাফায় ২ বছরের মুনাফা?", opts: ["৫০", "২৫", "১০০", "১০"], a: 0 },
-        { q: "১৫. (x+a)(x+b) = ?", opts: ["x^2+(a+b)x+ab", "x^2+abx+ab", "x^2+ab", "কোনোটিই না"], a: 0 },
-        { q: "১৬. বৃত্তের ক্ষেত্রফল?", opts: ["2πr", "πr^2", "πr", "2r"], a: 1 },
-        { q: "১৭. আয়তক্ষেত্রের পরিসীমা?", opts: ["2(L+W)", "L+W", "LxW", "2LW"], a: 0 },
-        { q: "১৮. ঘনকের তল কয়টি?", opts: ["৪", "৬", "৮", "১০"], a: 1 },
-        { q: "১৯. ফিবোনাক্কি সংখ্যা নয় কোনটি?", opts: ["১", "২", "৩", "৪"], a: 3 },
-        { q: "২০. ১ কুইন্টাল = কত কেজি?", opts: ["১০০", "১০০০", "১০", "৫০"], a: 0 }
+        { q: "১) 2.5 × 4 = ?", opts: ["৮", "৯", "১০", "১২"], a: 2 },
+        { q: "২) 3/7 এর শতকরা মান কত? (প্রায়)", opts: ["28.5%", "30%", "40%", "25%"], a: 0 },
+        { q: "৩) যদি a = 5, b = 3 হয়, তবে a + 2b = ?", opts: ["৮", "৯", "১১", "১২"], a: 2 },
+        { q: "৪) নিচের কোনটি একটি সেট?", opts: ["বড় সংখ্যা", "সুন্দর ফুল", "সপ্তাহের দিনগুলো", "লম্বা ছাত্র"], a: 2 },
+        { q: "৫) একটি আয়তক্ষেত্রের দৈর্ঘ্য ১২ সেমি ও প্রস্থ ৫ সেমি হলে ক্ষেত্রফল কত?", opts: ["১৭", "২৪", "৬০", "৭০"], a: 2 },
+        { q: "৬) ১৫% এর ভগ্নাংশ রূপ কোনটি?", opts: ["3/20", "1/5", "15/100", "2/15"], a: 0 },
+        { q: "৭) √64 এর মান কত?", opts: ["৬", "৮", "৯", "১০"], a: 1 },
+        { q: "৮) (a + b)² = ?", opts: ["a² + b²", "a² + 2ab + b²", "a² − b²", "2a + b²"], a: 1 },
+        { q: "৯) একটি পণ্যের ক্রয়মূল্য ৫০০ টাকা এবং মুনাফা ১০%। বিক্রয়মূল্য কত?", opts: ["৫১০", "৫৫০", "৬০০", "৫৮০"], a: 1 },
+        { q: "১০) যদি x − 4 = 11 হয়, তবে x = ?", opts: ["১১", "১২", "১৩", "১৫"], a: 3 },
+        { q: "১১) দুটি সংখ্যার গড় ৪০। একটি সংখ্যা ৩০ হলে অন্যটি কত?", opts: ["৪০", "৫০", "৩৫", "৪৫"], a: 1 },
+        { q: "১২) একটি বৃত্তের ব্যাসার্ধ ৭ সেমি। পরিধি কত?", opts: ["44 সেমি", "22 সেমি", "14 সেমি", "28 সেমি"], a: 0 },
+        { q: "১৩) ১২, ১৮ ও ৩০ এর ল.সা.গু কত?", opts: ["৬০", "৯০", "১৮০", "৩০"], a: 2 },
+        { q: "১৪) 0.0045 কে বৈজ্ঞানিক রূপে প্রকাশ করলে?", opts: ["4.5 × 10⁻²", "4.5 × 10⁻³", "4.5 × 10⁻⁴", "45 × 10⁻³"], a: 1 },
+        { q: "১৫) 3(x − 2) + 2(2x + 1) = ?", opts: ["5x + 4", "7x − 4", "7x − 1", "5x − 1"], a: 1 },
+        { q: "১৬) একটি বক্সে লাল, নীল ও সবুজ বল আছে অনুপাত ২ : ৩ : ৫। মোট বল ২০০ হলে সবুজ বল কত?", opts: ["৫০", "৬০", "৮০", "১০০"], a: 3 },
+        { q: "১৭) একটি সিলিন্ডারের ব্যাসার্ধ ৭ সেমি এবং উচ্চতা ১০ সেমি। আয়তন কত?", opts: ["1540", "770", "440", "2200"], a: 0 },
+        { q: "১৮) (x + 3)(x − 5) = ?", opts: ["x² + 2x − 15", "x² − 2x − 15", "x² − 15", "x² + 8x + 15"], a: 1 },
+        { q: "১৯) একটি সংখ্যার 12.5% = 25 হলে সংখ্যাটি কত?", opts: ["100", "150", "175", "200"], a: 3 },
+        { q: "২০) একটি ত্রিভুজের দুটি কোণ ৪৫° ও ৬০° হলে তৃতীয় কোণ কত?", opts: ["৭০°", "৬৫°", "৭৫°", "৮৫°"], a: 2 }
       ],
       "class9": [
-        { q: "১. sin 30° এর মান?", opts: ["1", "0", "0.5", "√3/2"], a: 2 },
-        { q: "২. log 10 ভিত্তিক 100 = ?", opts: ["10", "2", "100", "0"], a: 1 },
-        { q: "৩. সেটের সংযোগ (Union) চিহ্ন?", opts: ["∩", "U", "C", "φ"], a: 1 },
-        { q: "৪. f(x) = x+1 হলে f(0) = ?", opts: ["0", "1", "-1", "2"], a: 1 },
-        { q: "৫. tan 45° = ?", opts: ["0", "1", "∞", "√3"], a: 1 },
-        { q: "৬. বৃত্তস্ত চতুর্ভুজের বিপরীত কোণের সমষ্টি?", opts: ["৯০°", "১৮০°", "৩৬০°", "১০০°"], a: 1 },
-        { q: "৭. বাস্তব সংখ্যার সেট?", opts: ["N", "Z", "R", "Q"], a: 2 },
-        { q: "৮. 3^0 = ?", opts: ["0", "1", "3", "undefined"], a: 1 },
-        { q: "৯. a^3 - b^3 এর উৎপাদক সূত্র?", opts: ["(a-b)^3", "(a-b)(a^2+ab+b^2)", "(a+b)(a^2-ab+b^2)", "a^3+b^3"], a: 1 },
-        { q: "১০. 4^x = 16 হলে x = ?", opts: ["2", "4", "16", "1"], a: 0 },
-        { q: "১১. অতিভুজই কি বৃহত্তম বাহু?", opts: ["হ্যাঁ", "না", "কখনো কখনো", "অনিশ্চিত"], a: 0 },
-        { q: "১২. sec^2 A - tan^2 A = ?", opts: ["0", "1", "-1", "2"], a: 1 },
-        { q: "১৩. মূলদ সংখ্যা কোনটি?", opts: ["π", "e", "√2", "2.5"], a: 3 },
-        { q: "১৪. x^2 - 5x + 6 = 0 এর মূলদ্বয়?", opts: ["2,3", "-2,-3", "1,6", "-1,-6"], a: 0 },
-        { q: "১৫. সুষম ষড়ভুজের প্রতিটি কোণ?", opts: ["৯০°", "১২০°", "১০৮°", "৬০°"], a: 1 },
-        { q: "১৬. n(A) = 3 হলে P(A) এর উপাদান?", opts: ["৩", "৬", "৮", "৯"], a: 2 },
-        { q: "১৭. স্পর্শক ও ব্যাসার্ধের মধ্যবর্তী কোণ?", opts: ["০°", "৪৫°", "৯০°", "১৮০°"], a: 2 },
-        { q: "১৮. log_a a = ?", opts: ["0", "1", "a", "-1"], a: 1 },
-        { q: "১৯. বেলনের আয়তন?", opts: ["πr^2h", "2πrh", "πrh", "1/3πr^2h"], a: 0 },
-        { q: "২০. 0! = ?", opts: ["0", "1", "undefined", "-1"], a: 1 }
+        { q: "১) যদি x = 3 হয়, তবে 2x² − 5x + 1 = ?", opts: ["১০", "৮", "৪", "১৩"], a: 2 },
+        { q: "২) (a + b)(a − b) = ?", opts: ["a² + b²", "a² − b²", "a² − 2ab + b²", "2ab"], a: 1 },
+        { q: "৩) 3⁰ এর মান কত?", opts: ["০", "১", "৩", "অসংজ্ঞায়িত"], a: 1 },
+        { q: "৪) √144 এর মান কত?", opts: ["১০", "১১", "১২", "১৪"], a: 2 },
+        { q: "৫) দুটি কোণ সম্পূরক হলে তাদের যোগফল কত?", opts: ["৪৫°", "৯০°", "১৮০°", "৩৬০°"], a: 2 },
+        { q: "৬) sin 90° = ?", opts: ["০", "১", "1/2", "√3/2"], a: 1 },
+        { q: "৭) একটি আয়তক্ষেত্রের দৈর্ঘ্য ১২ সেমি ও প্রস্থ ৮ সেমি। এর ক্ষেত্রফল কত?", opts: ["৭২", "৯৬", "১০৪", "৮৪"], a: 1 },
+        { q: "৮) (2x − 3)(x + 4) = ?", opts: ["2x² + 5x − 12", "2x² + 8x − 3", "2x² − x − 12", "x² + 8x − 3"], a: 0 },
+        { q: "৯) ৫, ১০ ও ২০ এর হারমোনিক গড় কত?", opts: ["৮", "১০", "৯", "৭.৫"], a: 3 },
+        { q: "১০) যদি x + y = 10 এবং xy = 24 হয়, তবে x² + y² = ?", opts: ["৪০", "৫২", "২৮", "৩২"], a: 1 },
+        { q: "১১) tan 45° এর মান কত?", opts: ["০", "১", "√3", "1/√3"], a: 1 },
+        { q: "১২) সমীকরণ: 3x − 7 = 2x + 5 হলে x = ?", opts: ["১২", "−১২", "৭", "−৭"], a: 0 },
+        { q: "১৩) ব্যাসার্ধ ৭ সেমি হলে বৃত্তের ক্ষেত্রফল কত?", opts: ["121", "154", "66", "44"], a: 1 },
+        { q: "১৪) একটি জোড়া পাসা নিক্ষেপ করলে মোট ৮ পাওয়ার সম্ভাবনা কত?", opts: ["1/12", "1/8", "5/36", "1/6"], a: 2 },
+        { q: "১৫) x² − 7x + 12 = 0 এর মূলদ্বয় কী?", opts: ["৩ ও ৪", "২ ও ৬", "−৩ ও −৪", "১ ও ১২"], a: 0 },
+        { q: "১৬) sin²θ + cos²θ = ?", opts: ["০", "১", "tanθ", "secθ"], a: 1 },
+        { q: "১৭) একটি সিলিন্ডারের ব্যাসার্ধ ৫ সেমি, উচ্চতা ২০ সেমি। আয়তন কত? (π = 3.14)", opts: ["1000π", "1570", "3140", "500π"], a: 1 },
+        { q: "১৮) একটি ত্রিভুজের বাহুগুলো ৬, ৮ ও ১০। ত্রিভুজটি কোন ধরনের?", opts: ["সমবাহু", "সমদ্বিবাহু", "সমকোণী", "স্থূলকোণী"], a: 2 },
+        { q: "১৯) (x − 2)/(x + 3) = 1/2 হলে x = ?", opts: ["৭", "১", "−১", "৫"], a: 0 },
+        { q: "২০) একটি গুণোত্তর ধারার ৩য় পদ = ১২ এবং ৫ম পদ = ৪৮। common ratio r = ?", opts: ["২", "৩", "৪", "১.৫"], a: 0 }
       ]
     };
 
-    let currentQuestions = [];
-    let mistakeDetails = ""; // ভুল উত্তর জমানোর জন্য
-    let mistakeHTML = ""; // পপ-আপের জন্য সুন্দর ডিজাইনের ডাটা রাখার জন্য
+    // ১. ওয়ার্নিং দেখানো (ক্লাস সিলেক্ট করলে)
+    function showWarning() {
+      const cls = document.getElementById("quiz-class-selector").value;
+      if (!cls) return;
+      
+      document.getElementById("quiz-warning-msg").style.display = "block";
+      document.getElementById("quiz-container").style.display = "none";
+      document.getElementById("quiz-result-box").style.display = "none";
+      document.getElementById("quiz-timer-display").style.display = "none";
+      
+      document.getElementById("quiz-section").scrollIntoView({ behavior: 'smooth' });
+    }
 
+    // ২. নিশ্চিতকরণ এবং কুইজ শুরু (Start Button)
+    function confirmStartQuiz() {
+      document.getElementById("quiz-warning-msg").style.display = "none";
+      startQuiz();
+    }
+
+    // ৩. কুইজ রেন্ডার এবং টাইমার চালু
     function startQuiz() {
       const cls = document.getElementById("quiz-class-selector").value;
       const container = document.getElementById("quiz-container");
       const resultBox = document.getElementById("quiz-result-box");
       const qDiv = document.getElementById("quiz-questions");
+      const timerDisplay = document.getElementById("quiz-timer-display");
+
       resultBox.style.display = "none";
       qDiv.innerHTML = "";
+      
       if (!cls || !quizData[cls]) return;
-      currentQuestions = quizData[cls] || quizData["class9"];
+      currentQuestions = quizData[cls]; // ক্লাসের প্রশ্ন লোড হলো
+
+      // প্রশ্ন HTML এ বসানো
       currentQuestions.forEach((item, index) => {
         let html = `<div class="question-box"><div class="question-title">${item.q}</div><div class="options-grid">`;
-        item.opts.forEach((opt, optIndex) => { html += `<label class="option-label"><input type="radio" name="q${index}" value="${optIndex}" required> ${opt}</label>`; });
+        item.opts.forEach((opt, optIndex) => { 
+            html += `<label class="option-label"><input type="radio" name="q${index}" value="${optIndex}" required> ${opt}</label>`; 
+        });
         html += `</div></div>`;
         qDiv.innerHTML += html;
       });
+
       container.style.display = "block";
-    }
-
-    // টেস্ট বাতিল করার ফাংশন
-    function cancelQuiz() {
-      document.getElementById("quiz-container").style.display = "none";
-      document.getElementById("quiz-result-box").style.display = "none";
-      document.getElementById("quiz-class-selector").selectedIndex = 0;
-      // পেজ একটু উপরে স্ক্রল করে টাইটেলে নিয়ে যাবে
-      document.getElementById("quiz-section").scrollIntoView({ behavior: 'smooth' });
-    }
-
-    //---------------------------------------------------------
-    // Toggle Reviews Logic
-    function toggleReviews() {
-        var moreReviews = document.getElementById("more-reviews");
-        var btn = document.getElementById("see-more-btn");
-        
-        if (moreReviews.style.display === "none" || moreReviews.style.display === "") {
-            moreReviews.style.display = "grid";
-            btn.innerHTML = 'রিভিউ লুকান <i class="fa-solid fa-angle-up"></i>';
-        } else {
-            moreReviews.style.display = "none";
-            btn.innerHTML = 'আরও রিভিউ দেখুন <i class="fa-solid fa-angle-down"></i>';
-            document.querySelector('.testimonials').scrollIntoView({behavior: 'smooth'});
-        }
-    }
-
-    // Slider Logic
-    function slideLeft() {
-        var slider = document.getElementById('slider');
-        slider.scrollBy({ left: -340, behavior: 'smooth' });
-    }
-    function slideRight() {
-        var slider = document.getElementById('slider');
-        slider.scrollBy({ left: 340, behavior: 'smooth' });
-    }
-
-    // --- REVIEW FORM LOGIC ---
-    
-    // 1. Star Rating Logic
-    const stars = document.querySelectorAll('#star-rating i');
-    const ratingInput = document.getElementById('review_rating');
-    
-    stars.forEach(star => {
-      star.addEventListener('click', function() {
-        const val = this.getAttribute('data-value');
-        ratingInput.value = val;
-        
-        // Visual Update
-        stars.forEach(s => {
-          if(s.getAttribute('data-value') <= val) {
-            s.classList.remove('fa-regular');
-            s.classList.add('fa-solid', 'active');
-          } else {
-            s.classList.remove('fa-solid', 'active');
-            s.classList.add('fa-regular');
-          }
-        });
-      });
-    });
-
-    // 2. Review Submission Handler
-    function handleReview(e) {
-      e.preventDefault();
-      const btn = e.target.querySelector('button');
-      const originalText = btn.innerText;
-      btn.disabled = true;
-      btn.innerText = 'জমা হচ্ছে...';
       
-      const formData = {
-        name: document.getElementById('review_name').value + " (REVIEW: " + document.getElementById('review_rating').value + " Stars)",
-        phone: "N/A", 
-        child_class: "Review Submission",
-        message: document.getElementById('review_msg').value
-      };
+      // টাইমার রিসেট এবং শুরু
+      clearInterval(timerInterval);
+      timeLeft = 900; // ১৫ মিনিট
+      timerDisplay.style.display = "block";
+      updateTimerDisplay();
+      
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          alert("সময় শেষ! আপনার উত্তর অটোমেটিক সাবমিট হচ্ছে।");
+          submitQuiz(new Event('submit')); // অটো সাবমিট
+        }
+      }, 1000);
+    }
 
-      fetch(scriptURL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData) })
-      .then(() => { 
-        document.getElementById('review-status').style.display = 'block'; 
-        e.target.reset(); 
-        const stars = document.querySelectorAll('#star-rating i');
-        stars.forEach(s => { s.classList.remove('fa-solid', 'active'); s.classList.add('fa-regular'); });
-        btn.disabled = false; 
-        btn.innerText = originalText; 
-        setTimeout(() => { document.getElementById('review-status').style.display = 'none'; }, 5000);
-      })
-      .catch(error => { 
-        alert("সমস্যা হয়েছে! আবার চেষ্টা করুন।"); 
-        btn.disabled = false; 
-        btn.innerText = originalText; 
-      });
-    } 
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      document.getElementById("time-left").innerText = 
+        `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+      
+      // শেষ ১ মিনিট লাল কালার দিয়ে ওয়ার্নিং
+      const timerBox = document.getElementById("quiz-timer-display");
+      if(timeLeft <= 60) {
+          timerBox.style.background = "#ff0000";
+          timerBox.style.color = "#ffffff";
+          timerBox.classList.add("pulse-timer");
+      } else {
+          timerBox.style.background = "#fee2e2";
+          timerBox.style.color = "#ef4444";
+          timerBox.classList.remove("pulse-timer");
+      }
+    }
 
-    // --- NEW POPUP LOGIC ---
-
-    // 1. Submit Quiz ফাংশন (আপডেট করা: নতুন কেয়ার প্ল্যানের নামসহ)
+    // ৪. কুইজ সাবমিট করা
     function submitQuiz(e) {
-      e.preventDefault();
+      if(e) e.preventDefault();
+      clearInterval(timerInterval); // টাইমার থামানো হলো
+      document.getElementById("quiz-timer-display").style.display = "none";
+
       let score = 0;
       mistakeDetails = ""; 
       mistakeHTML = "";    
@@ -1828,8 +2001,20 @@
       });
       
       const cls = document.getElementById("quiz-class-selector").value;
-      const anonymousData = { sheet_name: "Quiz_Results", Class: cls, Score: score + "/20", Name: "Anonymous Visitor", Phone: "", Mistake_Report: "N/A" };
-      fetch(scriptURL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(anonymousData) });
+      
+      // Google Sheets Submission (Silent)
+      const anonymousData = { 
+          sheet_name: "Quiz_Results", 
+          Class: cls, 
+          Score: score + "/20", 
+          Name: "Anonymous Visitor", 
+          Phone: "", 
+          Mistake_Report: "N/A" 
+      };
+      
+      try {
+          fetch(scriptURL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(anonymousData) });
+      } catch(err) { console.log(err); }
 
       document.getElementById("quiz-container").style.display = "none";
       const resultBox = document.getElementById("quiz-result-box");
@@ -1843,7 +2028,7 @@
       resultBox.className = ""; 
       resultBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-      // নতুন কেয়ার প্ল্যানের নাম অনুযায়ী কন্ডিশন
+      // রেজাল্ট অনুযায়ী মেসেজ
       if (score <= 10) {
         resultBox.classList.add("res-bad");
         resultMsg.innerText = "সতর্কতা: বেসিক খুবই দুর্বল!"; resultMsg.className = "result-msg txt-bad";
@@ -1862,7 +2047,18 @@
       }
     }
 
-    // 2. নতুন Submit Lead ফাংশন (পপ-আপ ওপেন করবে)
+    // ৫. কুইজ বাতিল করা
+    function cancelQuiz() {
+      clearInterval(timerInterval);
+      document.getElementById("quiz-container").style.display = "none";
+      document.getElementById("quiz-result-box").style.display = "none";
+      document.getElementById("quiz-timer-display").style.display = "none";
+      document.getElementById("quiz-warning-msg").style.display = "none";
+      document.getElementById("quiz-class-selector").selectedIndex = 0;
+      document.getElementById("quiz-section").scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ৬. রিপোর্ট বাটন এবং লিড কালেকশন
     function submitLead(e) {
       e.preventDefault();
       const btn = e.target.querySelector('button');
@@ -1879,6 +2075,7 @@
         sheet_name: "Quiz_Results", Name: name, Phone: phone, Class: cls, Score: scoreText,
         Mistake_Report: mistakeDetails, Message: "Viewed Report Popup"
       };
+      
       fetch(scriptURL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData) })
       .catch(err => console.error(err));
 
@@ -1900,7 +2097,7 @@
         if(!finalMistakeHTML) finalMistakeHTML = "<p style='color:green; text-align:center; font-weight:bold;'>অভিনন্দন! কোনো ভুল হয়নি।</p>";
         document.getElementById('pop-mistakes').innerHTML = finalMistakeHTML;
 
-        openReport(); // পপ-আপ ওপেন
+        openReport();
         
         btn.disabled = false;
         btn.innerHTML = originalText;
@@ -1920,34 +2117,95 @@
         modal.style.display = "none";
       }
     }
+    // --- QUIZ LOGIC END ---
 
-    //  Start Success Story
-    // --- SUCCESS STORY TOGGLE LOGIC ---
-    function toggleSuccessStories() {
-        const stories = document.querySelectorAll('.hidden-story');
-        const btn = document.getElementById('see-more-stories-btn');
-        let isHidden = stories[0].style.display === 'none' || stories[0].style.display === '';
+
+    // --- OTHER UI LOGIC (SLIDER, FAQ, REVIEWS) ---
+
+    // Toggle Reviews
+    function toggleReviews() {
+        var moreReviews = document.getElementById("more-reviews");
+        var btn = document.getElementById("see-more-btn");
         
-        stories.forEach(story => {
-            story.style.display = isHidden ? 'block' : 'none';
-        });
-
-        if (isHidden) {
-            btn.innerHTML = 'সফলতা লুকান <i class="fa-solid fa-angle-up"></i>';
+        if (moreReviews.style.display === "none" || moreReviews.style.display === "") {
+            moreReviews.style.display = "grid";
+            btn.innerHTML = 'রিভিউ লুকান <i class="fa-solid fa-angle-up"></i>';
         } else {
-            btn.innerHTML = 'আরও সফলতা দেখুন <i class="fa-solid fa-angle-down"></i>';
-            document.querySelector('.success-story-section').scrollIntoView({ behavior: 'smooth' });
+            moreReviews.style.display = "none";
+            btn.innerHTML = 'আরও রিভিউ দেখুন <i class="fa-solid fa-angle-down"></i>';
+            document.querySelector('.testimonials').scrollIntoView({behavior: 'smooth'});
         }
     }
-    // end
-    // --- FLIP CARD SEE MORE LOGIC ---
+
+    // Review Submit
+    const stars = document.querySelectorAll('#star-rating i');
+    const ratingInput = document.getElementById('review_rating');
+    
+    stars.forEach(star => {
+      star.addEventListener('click', function() {
+        const val = this.getAttribute('data-value');
+        ratingInput.value = val;
+        stars.forEach(s => {
+          if(s.getAttribute('data-value') <= val) {
+            s.classList.remove('fa-regular');
+            s.classList.add('fa-solid', 'active');
+          } else {
+            s.classList.remove('fa-solid', 'active');
+            s.classList.add('fa-regular');
+          }
+        });
+      });
+    });
+
+    function handleReview(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      const originalText = btn.innerText;
+      btn.disabled = true;
+      btn.innerText = 'জমা হচ্ছে...';
+      
+      const formData = {
+        name: document.getElementById('review_name').value + " (REVIEW: " + document.getElementById('review_rating').value + " Stars)",
+        phone: "N/A", 
+        child_class: "Review Submission",
+        message: document.getElementById('review_msg').value
+      };
+
+      fetch(scriptURL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData) })
+      .then(() => { 
+        document.getElementById('review-status').style.display = 'block'; 
+        e.target.reset(); 
+        const stars = document.querySelectorAll('#star-rating i');
+        stars.forEach(s => { s.classList.remove('fa-solid', 'active'); s.classList.add('fa-regular'); });
+        btn.disabled = false; 
+        btn.innerText = originalText; 
+        setTimeout(() => { document.getElementById('review-status').style.display = 'none'; }, 5000);
+      })
+      .catch(error => { 
+        alert("সমস্যা হয়েছে! আবার চেষ্টা করুন।"); 
+        btn.disabled = false; 
+        btn.innerText = originalText; 
+      });
+    }
+
+    // Success Story Slider
+    function slideSuccess(direction) {
+      const container = document.getElementById('success-track');
+      const scrollAmount = 320; 
+      if (direction === 'left') {
+        container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      } else {
+        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      }
+    }
+
+    // Flip Card Logic
     function toggleFlipCards() {
         const hiddenCards = document.querySelectorAll('.hidden-flip-card');
         const btn = document.getElementById('see-more-flip-btn');
-        let isHidden = hiddenCards[0].style.display !== 'block'; // চেক করছি এখন লুকানো আছে কি না
+        let isHidden = hiddenCards[0].style.display !== 'block'; 
 
         hiddenCards.forEach(card => {
-            // যদি লুকানো থাকে, তবে দেখাও (block), আর না হলে লুকাও (none)
             card.style.display = isHidden ? 'block' : 'none';
         });
 
@@ -1955,10 +2213,23 @@
             btn.innerHTML = 'ম্যাজিক লুকান <i class="fa-solid fa-angle-up"></i>';
         } else {
             btn.innerHTML = 'আরও ম্যাজিক দেখুন <i class="fa-solid fa-angle-down"></i>';
-            // বাটন চাপলে আবার সেকশনের শুরুতে নিয়ে যাবে
             document.querySelector('.flip-section-wrap').scrollIntoView({ behavior: 'smooth' });
         }
     }
+
+    // FAQ Accordion
+    const allDetails = document.querySelectorAll('.faq-item');
+    allDetails.forEach((det) => {
+      det.addEventListener('toggle', (e) => {
+        if (det.open) {
+          allDetails.forEach((other) => {
+            if (other !== det && other.open) {
+              other.removeAttribute('open');
+            }
+          });
+        }
+      });
+    });
   </script>
 </body>
 </html>
