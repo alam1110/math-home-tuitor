@@ -772,6 +772,37 @@
       animation: timerPulse 1s infinite;
     }
     /*end*/
+    /* আমার পড়ানোর পদ্ধতি mobile e choto korechi */
+    /* Mobile Process Section Fix - 2 Column Grid */
+    @media (max-width: 768px) {
+      .process-steps {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr; /* দুটি কলাম */
+        gap: 15px;
+      }
+
+      .step {
+        background: #f8fafc;
+        padding: 15px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        margin: 0 !important;
+        width: 100% !important;
+      }
+      
+      /* তীর চিহ্ন লুকানো থাকবে কারণ গ্রিডে তীরের দরকার নেই */
+      .arrow-icon {
+        display: none !important;
+      }
+      
+      /* শেষ ধাপটি মাঝখানে দেখাবে */
+      .step:last-child {
+        grid-column: span 2; /* পুরো জায়গা নিবে */
+        width: 50% !important;
+        margin: 0 auto !important;
+      }
+    }
+    /*end*/
   </style>
 </head>
 <body>
@@ -2233,3 +2264,4 @@
   </script>
 </body>
 </html>
+
