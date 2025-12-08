@@ -1210,6 +1210,35 @@
         transform: translateY(0); /* সঠিক জায়গায় আসবে */
       }
     }
+    /* --- After submit info sheet section CTA Animation Styles --- */
+    @keyframes attentionPulse {
+      0% { transform: scale(1); background: #f1f5f9; border-color: #cbd5e1; }
+      50% { transform: scale(1.03); background: #dbeafe; border-color: #3b82f6; box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4); }
+      100% { transform: scale(1); background: #f1f5f9; border-color: #cbd5e1; }
+    }
+
+    .cta-animated-box {
+       margin-top: 30px;
+       padding: 20px;
+       border-radius: 15px;
+       border: 2px dashed #cbd5e1; /* শুরুতে হালকা বর্ডার */
+       text-align: center;
+       /* এনিমেশন এখানে কল করা হয়েছে */
+       animation: attentionPulse 2s infinite ease-in-out; 
+    }
+
+    .cta-highlight-text {
+       font-size: 1.1rem;
+       font-weight: 800; /* অনেক মোটা লেখা */
+       color: #1e40af;   /* গাঢ় নীল রঙ */
+       margin-bottom: 15px;
+       line-height: 1.5;
+    }
+    /*Story Model*/
+    @keyframes zoomIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -1354,24 +1383,120 @@
     
     </section>
     <!--About & why me end-->
-    <!--
-    <div class="process-container">
-      <h2 class="section-title">আমার পড়ানোর পদ্ধতি</h2>
-      <p style="text-align:center; color:#64748b; margin-bottom:20px;">গণিতকে বোঝার বিষয় বানাই, মুখস্থের নয়।</p>
+  <!-- Image demo -->
+    <div class="process-container" id="visual-demo" style="background: #f8fafc; padding: 40px 20px; border-radius: 15px; margin-bottom: 50px;">
       
-      <div class="process-steps">
-        <div class="step"><div class="step-icon"><i class="fa-regular fa-lightbulb"></i></div><h4>ধারণা</h4></div>
-        <div class="arrow-icon"><i class="fa-solid fa-arrow-right"></i></div>
-        <div class="step"><div class="step-icon"><i class="fa-solid fa-chalkboard-user"></i></div><h4>উদাহরণ</h4></div>
-        <div class="arrow-icon"><i class="fa-solid fa-arrow-right"></i></div>
-        <div class="step"><div class="step-icon"><i class="fa-solid fa-pen-to-square"></i></div><h4>অনুশীলন</h4></div>
-        <div class="arrow-icon"><i class="fa-solid fa-arrow-right"></i></div>
-        <div class="step"><div class="step-icon"><i class="fa-solid fa-rotate"></i></div><h4>রিভিশন</h4></div>
-        <div class="arrow-icon"><i class="fa-solid fa-arrow-right"></i></div>
-        <div class="step"><div class="step-icon"><i class="fa-solid fa-trophy"></i></div><h4>পরীক্ষা</h4></div>
+      <h2 class="section-title"><i class="fa-solid fa-book-open-reader"></i> গল্পে গল্পে গণিত (Visual Method)</h2>
+      <p style="text-align: center; color: #64748b; margin-bottom: 30px; max-width: 700px; margin-left: auto; margin-right: auto;">
+        নিচের প্রশ্নগুলোতে ক্লিক করুন এবং দেখুন—আমি কীভাবে গল্পের মাধ্যমে কঠিন অংক সমাধান করি।
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+        
+        <div onclick="openStory('story1.webp', 'পাটিগণিত: পায়েসে দুধ ও চিনির অনুপাত ৭: ২। ঐ পায়েসে চিনির পরিমাণ ৪ কেজি হলে, দুধের পরিমাণ কত?', '✅ দাদুর গল্পের মাধ্যমে সমাধান')" 
+             style="background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+          <div>
+             <span class="topic-badge bg-geo" style="font-size: 0.75rem; margin-bottom: 5px;">পাটিগণিত</span>
+             <h4 style="font-size: 1rem; color: #1e293b; margin: 0;">❓ পায়েসে চিনি ও দুধের পরিমাণ নির্ণয়</h4>
+          </div>
+          <i class="fa-solid fa-eye" style="color: #3b82f6; background: #eff6ff; padding: 10px; border-radius: 50%;"></i>
+        </div>
+
+        <div onclick="openStory('story2.webp', 'বীজগণিত: 3x - 7 = 20 হলে x=?', '✅ বাস্তব উদাহরণ দিয়ে সমাধান')" 
+             style="background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+          <div>
+             <span class="topic-badge bg-bij" style="font-size: 0.75rem; margin-bottom: 5px;">বীজগণিত</span>
+             <h4 style="font-size: 1rem; color: #1e293b; margin: 0;">❓ সমীকরণের x এর মান নির্ণয়</h4>
+          </div>
+          <i class="fa-solid fa-eye" style="color: #3b82f6; background: #eff6ff; padding: 10px; border-radius: 50%;"></i>
+        </div>
+
+        <div onclick="openStory('story3.webp', 'জ্যামিতি: প্রমাণ করো যে একটি চতুর্ভুজের চারটি কোণের সমষ্টি চার সমকোণ।', '✅ জাদুর রেখা দিয়ে সমাধান')" 
+             style="background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+          <div>
+             <span class="topic-badge bg-pati" style="font-size: 0.75rem; margin-bottom: 5px;">জ্যামিতি</span>
+             <h4 style="font-size: 1rem; color: #1e293b; margin: 0;">❓ চতুর্ভুজের চার কোণের সমষ্টি</h4>
+          </div>
+          <i class="fa-solid fa-eye" style="color: #3b82f6; background: #eff6ff; padding: 10px; border-radius: 50%;"></i>
+        </div>
+
+        <div class="extra-visual" onclick="openStory('story4.webp', 'MCQ ১০ সেকেন্ডে: একটি রম্বসের দুইটি কর্ণের দৈর্ঘ্য ৮ একক ও ১২ একক হলে এর ক্ষেত্রফল কত?', '✅ সমাধান চোখের পলকে')" 
+             style="display: none; background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; cursor: pointer; transition: 0.3s; align-items: center; justify-content: space-between; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+          <div>
+             <span class="topic-badge bg-pati" style="font-size: 0.75rem; margin-bottom: 5px;">MCQ ১০ সেকেন্ডে</span>
+             <h4 style="font-size: 1rem; color: #1e293b; margin: 0;">❓ রম্বসের ষেত্রফল</h4>
+          </div>
+          <i class="fa-solid fa-eye" style="color: #3b82f6; background: #eff6ff; padding: 10px; border-radius: 50%;"></i>
+        </div>
+
+        <div class="extra-visual" onclick="openStory('story6.webp', 'MCQ ১০ সেকেন্ডে: একটি বর্গক্ষেত্রের কর্ণ ১০√২ সে. মি. হলে বাহু = কত?', '✅ সমাধান চোখের পলকে')" 
+             style="display: none; background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; cursor: pointer; transition: 0.3s; align-items: center; justify-content: space-between; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+          <div>
+             <span class="topic-badge bg-pati" style="font-size: 0.75rem; margin-bottom: 5px;">MCQ ১০ সেকেন্ডে</span>
+             <h4 style="font-size: 1rem; color: #1e293b; margin: 0;">❓ বর্গক্ষেত্রের বাহু নির্ণয়</h4>
+          </div>
+          <i class="fa-solid fa-eye" style="color: #3b82f6; background: #eff6ff; padding: 10px; border-radius: 50%;"></i>
+        </div>
+
+        <div class="extra-visual" onclick="openStory('story5.webp', 'পাটিগণিত: একটি ব্যাগের মূল্য ১৫০০ টাকার ওপর ২০% এরপর ১০% ছাড় হলে বিক্রয়মূল্য কত?', '✅ ধাপে ধাপে সহজ সমাধান')" 
+             style="display: none; background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; cursor: pointer; transition: 0.3s; align-items: center; justify-content: space-between; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+          <div>
+             <span class="topic-badge bg-geo" style="font-size: 0.75rem; margin-bottom: 5px;">পাটিগণিত</span>
+             <h4 style="font-size: 1rem; color: #1e293b; margin: 0;">❓ ব্যাগের বিক্রয়মূল্য</h4>
+          </div>
+          <i class="fa-solid fa-eye" style="color: #3b82f6; background: #eff6ff; padding: 10px; border-radius: 50%;"></i>
+        </div>
+
+        <div class="extra-visual" onclick="openStory('story7.webp', 'MCQ ১০ সেকেন্ডে: ২৬ সে মি ব্যাসবিশিষ্ট বৃত্তের কেন্দ্র থেকে ৫ সে মি দূরে অবস্থিত জ্যা এর দৈর্ঘ্য কত?', '✅ ১ লাইনের নিয়ম')" 
+             style="display: none; background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; cursor: pointer; transition: 0.3s; align-items: center; justify-content: space-between; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+          <div>
+             <span class="topic-badge bg-pati" style="font-size: 0.75rem; margin-bottom: 5px;">MCQ ১০ সেকেন্ডে</span>
+             <h4 style="font-size: 1rem; color: #1e293b; margin: 0;">❓ জ্যা এর দৈর্ঘ্য</h4>
+          </div>
+          <i class="fa-solid fa-eye" style="color: #3b82f6; background: #eff6ff; padding: 10px; border-radius: 50%;"></i>
+        </div>
+
+      </div>
+
+      <div style="text-align: center; margin-top: 30px;">
+        <button id="see-more-visual-btn" onclick="toggleVisuals()" class="btn btn-outline" style="cursor: pointer; padding: 10px 25px;">
+            আরও দেখুন <i class="fa-solid fa-angle-down"></i>
+        </button>
+      </div>
+      
+      <div style="text-align: center; margin-top: 40px;">
+        <div style="background: #eff6ff; padding: 20px; border-radius: 15px; border: 2px dashed #3b82f6; max-width: 600px; margin: 0 auto;">
+          <p style="color: #1e40af; font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">
+            অধ্যায়ভিত্তিক টেকনিক একসাথে চান?
+          </p>
+          <a href="#book-free-class" class="btn" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; text-decoration: none; padding: 12px 30px; border-radius: 50px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);">
+            <i class="fa-solid fa-download"></i> স্পেশাল শিটটি ডাউনলোড করুন
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="story-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px);">
+      
+      <div style="position: relative; background: white; width: 100%; max-width: 800px; border-radius: 15px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: zoomIn 0.3s;">
+        
+        <button onclick="closeStory()" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.1); border: none; font-size: 1.5rem; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; color: #333; z-index: 10;">&times;</button>
+        
+        <div style="padding: 15px; background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+           <h3 id="modal-title" style="margin: 0; font-size: 1.1rem; color: var(--secondary);"></h3>
+        </div>
+
+        <div style="background: #000; display: flex; justify-content: center;">
+           <img id="modal-img" src="" alt="Story" style="width: 100%; max-height: 70vh; object-fit: contain;">
+        </div>
+
+        <div style="padding: 15px; text-align: center; background: #f0fdf4; color: #166534; font-weight: bold; font-size: 1rem;" id="modal-sol">
+        </div>
+
       </div>
     </div>
-     -->
+    <!--end-->
 
     <!-- Plan Start -->
     <div style="margin-bottom: 50px;">
@@ -1472,7 +1597,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Quiz Start-->
     <div class="quiz-section" id="quiz-section">
       <h2 class="section-title"><i class="fa-solid fa-clipboard-question"></i> আপনার সন্তানের গণিত দক্ষতা যাচাই (Live Test)</h2>
@@ -1581,350 +1706,9 @@
         </div>
       </div>
     </div>
-
-    <!--Teaching demo-->
-    <div class="flip-section-wrap">
-      <h2 class="section-title"><i class="fa-solid fa-wand-magic-sparkles"></i> গল্পে গল্পে গণিত (ম্যাজিক ডেমো)</h2>
-      <p style="text-align:center; color:#64748b; margin-bottom:30px;">নিচের কার্ডগুলোতে মাউস ধরুন (বা ট্যাপ করুন), দেখুন কঠিন অংক কীভাবে গল্পের মতো সহজ হয়ে যায়!</p>
-      
-      <div class="flip-grid">
-
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <span class="topic-badge bg-geo">পরিমিতি (Square)</span>
-              <h4 class="card-q-title">বর্গক্ষেত্রের গোপন কর্ণ</h4>
-              <p class="card-q-text">কর্ণ = ১০√২ সে. মি.</p>
-              <p style="font-size:0.9rem;">বর্গক্ষেত্রটির বাহুর দৈর্ঘ্য কত?</p>
-              <p style="margin-top:10px; font-size:0.8rem; color:#94a3b8;">(উত্তর দেখতে টাচ করুন)</p>
-            </div>
-            <div class="flip-card-back">
-              <div class="mini-q-ref">
-                <strong>প্রশ্ন:</strong> কর্ণ ১০√২  সে. মি. হলে বাহু কত?
-              </div>
-              <div class="sol-title">🕵️ গোপন কর্ণের রহস্য</div>
-              <div class="sol-body">
-                <p>বর্গক্ষেত্র গর্ব করে বলল, "আমার কর্ণ ১০√২"।<br>
-                সূত্র মতে: কর্ণ = a√২<br>
-                সুতরাং, a√২ = ১০√২<br>
-                উভয় পাশ থেকে √২ বাদ দিলে থাকে ১০।</p>
-              </div>
-              <div class="final-ans">✅ উত্তর: ১০ সে.মি.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <span class="topic-badge bg-pati">পাটিগণিত (Ratio)</span>
-              <h4 class="card-q-title">পায়েস বানানোর দাদুর গল্প</h4>
-              <p class="card-q-text">পায়েসে দুধ ও চিনির অনুপাত ৭: ২। ঐ পায়েসে চিনির পরিমাণ ৪ কেজি হলে...</p>
-              <p style="font-size:0.9rem;"> দুধের পরিমাণ কত?</p>
-            </div>
-            <div class="flip-card-back">
-              <div class="mini-q-ref">
-                <strong>প্রশ্ন:</strong> পায়েসে দুধ ও চিনির অনুপাত ৭: ২। ঐ পায়েসে চিনির পরিমাণ ৪ কেজি হলে, দুধের পরিমাণ কত?
-              </div>
-              <div class="sol-title">একদিন দাদু পায়েস বানাবেন।</div>
-              <div class="sol-body">
-                <p>একদিন দাদু পায়েস বানাবেন। দাদুর একটা নিয়ম আছে—<br>
-
-                “পায়েসে দুধ দিতে হবে ৭ কাপ, আর চিনি দিতে হবে ২ কাপ।”<br>
-                <strong>🍬 এখন ঘটনাটা হলো…</strong><br>
-
-                দাদু দেখলেন, তার কাছে চিনি আছে ঠিক ৪ কেজি।<br>
-                দাদু বললেন—<br>
-
-                “যদি ২ কাপ চিনির জায়গায় ৪ কেজি হয়,<br>
-
-                তাহলে ১ কাপ চিনি কতো কেজি?”<br>
-
-                ছোট্ট রাফি বলল—<br>
-
-                “দাদু, ৪ কেজি যদি ২ কাপ হয়,<br>
-
-                তাহলে ১ কাপ তো ২ কেজি!”<br>
-
-                দাদু বললেন— “ঠিকই ধরেছো!”<br>
-
-                🥛 এবার দুধ কয় কেজি লাগবে?<br>
-
-                দাদুর নিয়ম: দুধ = ৭ কাপ<br>
-
-                যেহেতু,১ কাপ = ২ কেজি,<br>
-
-                তাই দুধ হবে—<br>
-                ৭ কাপ × ২ কেজি = ১৪ কেজি<br>
-
-                রাফি দৌড়ে গিয়ে বলল— “দাদু! দুধ লাগবে ১৪ কেজি!” <br>
-
-                দাদু খুব খুশি হয়ে বললেন— “তা হলে আজ পায়েস খুব মজার হবে। 
-              </div>
-              <div class="final-ans">🎯 উত্তর: দুধ = ১৪ কেজি</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <span class="topic-badge bg-geo">পরিমিতি (Volume)</span>
-              <h4 class="card-q-title">সিলিন্ডারের দালান</h4>
-              <p class="card-q-text">r = 7, h = 12</p>
-              <p style="font-size:0.9rem;">সিলিন্ডারের আয়তন কত?</p>
-            </div>
-            <div class="flip-card-back">
-              <div class="mini-q-ref">
-                <strong>প্রশ্ন:</strong> r=7, h=12 হলে আয়তন?
-              </div>
-              <div class="sol-title">🏢 বিশাল জায়গার গল্প</div>
-              <div class="sol-body">
-                <p>সিলিন্ডার বলল, "আমার পেটের ভেতর কত জায়গা জানো?"<br>
-                সূত্র: V = πr²h<br>
-                = (২২/৭) × ৪৯ × ১২<br>
-                = ১৮৪৮ ঘন সেমি।</p>
-              </div>
-              <div class="final-ans">📦 উত্তর: ১৮৪৮ ঘন সেমি</div>
-            </div>
-          </div>
-        </div>
-
-        
-
-        <div class="flip-card hidden-flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <span class="topic-badge bg-geo">জ্যামিতি (Triangle)</span>
-              <h4 class="card-q-title">পারিবারিক সভা</h4>
-              <p class="card-q-text">কোণ: ৪০° ও ৭৫°</p>
-              <p style="font-size:0.9rem;">৩য় কোণটি কত?</p>
-            </div>
-            <div class="flip-card-back">
-              <div class="mini-q-ref">
-                <strong>প্রশ্ন:</strong> দুটি কোণ ৪০° ও ৭৫° হলে ৩য়টি?
-              </div>
-              <div class="sol-title">🔺 তিন ভাইয়ের গল্প</div>
-              <div class="sol-body">
-                <p>বড় দুই ভাই মিলে হলো: ৪০+৭৫ = ১১৫°।<br>
-                বাকি থাকে: ১৮০ - ১১৫ = ৬৫°।<br>
-                ছোট ভাই বলল, "আমি ৬৫°, ভুলে যেও না!"</p>
-              </div>
-              <div class="final-ans">📐 উত্তর: ৬৫°</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flip-card hidden-flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <span class="topic-badge bg-bij">বীজগণিত (Equation)</span>
-              <h4 class="card-q-title">দুটি সংখ্যার প্রেম</h4>
-              <p class="card-q-text">যোগফল ৩০, গুণফল ২০০</p>
-              <p style="font-size:0.9rem;">সংখ্যা দুটি কী কী?</p>
-            </div>
-            <div class="flip-card-back">
-              <div class="mini-q-ref">
-                <strong>প্রশ্ন:</strong> যোগ ৩০, গুণ ২০০ হলে সংখ্যাদ্বয়?
-              </div>
-              <div class="sol-title">🎭 ছদ্মবেশে দ্বিঘাত সমীকরণ</div>
-              <div class="sol-body">
-                <p>সমীকরণ সাজালে পাই: x² - 30x + 200 = 0<br>
-                ফ্যাক্টর করলে: (x - 20)(x - 10)<br>
-                অবশেষে দুই বন্ধু মুখ খুলল, তারা ১০ আর ২০!</p>
-              </div>
-              <div class="final-ans">🔢 উত্তর: ১০ এবং ২০</div>
-            </div>
-          </div>
-        </div>
-        <div class="flip-card hidden-flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <span class="topic-badge bg-pati">পাটিগণিত (Reverse %)</span>
-              <h4 class="card-q-title">হারিয়ে যাওয়া সংখ্যা</h4>
-              <p class="card-q-text">সংখ্যা - ২৫% = ৭৫</p>
-              <p style="font-size:0.9rem;">মূল সংখ্যাটি কত?</p>
-            </div>
-            <div class="flip-card-back">
-              <div class="mini-q-ref">
-                <strong>প্রশ্ন:</strong> ২৫% কমার পর ৭৫ হলে সংখ্যাটি?
-              </div>
-              <div class="sol-title">🍰 এক চতুর্থাংশের কান্না</div>
-              <div class="sol-body">
-                <p>২৫% (১/৪ অংশ) কেটে নেওয়ায় সে ৭৫।<br>
-                মানে ৩ ভাগে ৭৫, এক ভাগে ২৫।<br>
-                তাহলে পুরো ৪ ভাগ = ২৫ × ৪ = ৩০০।</p>
-              </div>
-              <div class="final-ans">💯 উত্তর: ৩০০</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flip-card hidden-flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <span class="topic-badge bg-pati">পাটিগণিত (LCM)</span>
-              <h4 class="card-q-title">বন্ধুদের গোপন ক্লু</h4>
-              <p class="card-q-text">সংখ্যা: ১২ ও ১৫</p>
-              <p style="font-size:0.9rem;">ল.সা.গু কত?</p>
-            </div>
-            <div class="flip-card-back">
-              <div class="mini-q-ref">
-                <strong>প্রশ্ন:</strong> ১২ ও ১৫ এর ল.সা.গু?
-              </div>
-              <div class="sol-title">🤝 দুই বন্ধুর মিল</div>
-              <div class="sol-body">
-                <p>১২ এর নামতা: ১২, ২৪, ৩৬, ৪৮, ৬০...<br>
-                ১৫ এর নামতা: ১৫, ৩০, ৪৫, ৬০...<br>
-                দুজনের প্রথম দেখা হলো ৬০ এ!</p>
-              </div>
-              <div class="final-ans">🔗 উত্তর: ৬০</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flip-card hidden-flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <span class="topic-badge bg-bij">বীজগণিত (Linear)</span>
-              <h4 class="card-q-title">সমীকরণের দরজা</h4>
-              <p class="card-q-text">3x - 7 = 20</p>
-              <p style="font-size:0.9rem;">x এর মান কত?</p>
-            </div>
-            <div class="flip-card-back">
-              <div class="mini-q-ref">
-                <strong>প্রশ্ন:</strong> 3x - 7 = 20 হলে x?
-              </div>
-              <div class="sol-title">🔓 তালা খোলার চাবি</div>
-              <div class="sol-body">
-                <p>৭ কে ডানপাশে পাঠালে: 3x = 27<br>
-                ৩ দিয়ে ভাগ করলে দরজা খুলে গেল!<br>
-                x = 27 ÷ 3 = 9</p>
-              </div>
-              <div class="final-ans">🔑 উত্তর: ৯</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flip-card hidden-flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <span class="topic-badge bg-pati">পাটিগণিত (Discount)</span>
-              <h4 class="card-q-title">দোকানির দ্বিগুণ ছাড়</h4>
-              <p class="card-q-text">১৫০০ টাকায় ২০% + ১০%</p>
-              <p style="font-size:0.9rem;">চূড়ান্ত দাম কত?</p>
-            </div>
-            <div class="flip-card-back">
-              <div class="mini-q-ref">
-                <strong>প্রশ্ন:</strong> ১৫০০ এর ওপর ২০% এরপর ১০% ছাড়?
-              </div>
-              <div class="sol-title">📉 ডিসকাউন্ট অফার</div>
-              <div class="sol-body">
-                <p>১৫০০ এর ২০% = ১৫০০*২০/১০০ = ৩০০ টাকা কমলে্‌ 
-                ১ম বার (১৫০০ - ৩০০) টাকা= ১২০০ টাকা<br>
-                ২য় বার ১২০০ এর ১০% = ১২০০*১০/১০০ = ১২০ টাকা কমলে,<br>
-                ১২০০ - ১২০ = ১০৮০ টাকা।</p>
-              </div>
-              <div class="final-ans">🏷️ উত্তর: ১০৮০ টাকা</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flip-card hidden-flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <span class="topic-badge bg-tri">ত্রিকোণমিতি (Height)</span>
-              <h4 class="card-q-title">পাহাড়ের উচ্চতা</h4>
-              <p class="card-q-text">কোণ ৩০°, দূরত্ব ৫০</p>
-              <p style="font-size:0.9rem;">উচ্চতা কত? (tan 30° = 1/√3)</p>
-            </div>
-            <div class="flip-card-back">
-              <div class="mini-q-ref">
-                <strong>প্রশ্ন:</strong> কোণ ৩০°, ভূমি ৫০ হলে লম্ব?
-              </div>
-              <div class="sol-title">⛰️ পাহাড় মাপা</div>
-              <div class="sol-body">
-                <p>সূত্র: Height = Distance × tan 30°<br>
-                = 50 × (1/√3)<br>
-                = প্রায় ২৮.৮৬ মিটার।</p>
-              </div>
-              <div class="final-ans">📏 উত্তর: ২৮.৮৬ মি. (প্রায়)</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flip-card hidden-flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <span class="topic-badge bg-pati">পাটিগণিত (Ratio)</span>
-              <h4 class="card-q-title">চেয়ার সাজানো</h4>
-              <p class="card-q-text">ছেলে:মেয়ে = ৩:৫</p>
-              <p style="font-size:0.9rem;">মোট ৮০টি হলে ছেলের চেয়ার?</p>
-            </div>
-            <div class="flip-card-back">
-              <div class="mini-q-ref">
-                <strong>প্রশ্ন:</strong> ৩:৫ অনুপাতে ৮০ এর মধ্যে ৩ অংশ কত?
-              </div>
-              <div class="sol-title">🪑 অনুপাত পরিবার</div>
-              <div class="sol-body">
-                <p>মোট ভাগ = ৩+৫ = ৮।<br>
-                ৮ ভাগে ৮০ হলে, ১ ভাগে ১০।<br>
-                ছেলেদের ভাগ ৩, তাই ৩ × ১০ = ৩০।</p>
-              </div>
-              <div class="final-ans">👦 উত্তর: ৩০ টি</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flip-card hidden-flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <span class="topic-badge bg-bij">বীজগণিত (Roots)</span>
-              <h4 class="card-q-title">লুকিয়ে থাকা মূল</h4>
-              <p class="card-q-text">x² - 9x + 20 = 0</p>
-              <p style="font-size:0.9rem;">মূলদ্বয় বা x এর মান কী কী?</p>
-            </div>
-            <div class="flip-card-back">
-              <div class="mini-q-ref">
-                <strong>প্রশ্ন:</strong> x² - 9x + 20 = 0 এর সমাধান?
-              </div>
-              <div class="sol-title">🌱 সমীকরণের সন্তান</div>
-              <div class="sol-body">
-                <p>২০ কে ভাঙলে পাই ৪ ও ৫ (যাদের যোগফল ৯)।<br>
-                উৎপাদক: (x - 4)(x - 5) = 0<br>
-                তাই, x = 4 অথবা x = 5</p>
-              </div>
-              <div class="final-ans">⚡ উত্তর: ৪ এবং ৫</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <div style="text-align: center; margin-top: 30px;">
-        <button id="see-more-flip-btn" onclick="toggleFlipCards()" class="btn btn-outline" style="cursor: pointer; padding: 10px 25px;">
-          আরও ম্যাজিক দেখুন <i class="fa-solid fa-angle-down"></i>
-        </button>
-      </div>
-
-    </div>
     <!--end-->
 
-    <!-- 
-    <div class="services-wrap">
-      <h2><i class="fa-solid fa-star"></i> এক্সক্লুসিভ ফিচার ও সুবিধাসমূহ</h2>
-      <div class="services-grid">
-        <div class="service-card"><i class="fa-solid fa-wrench"></i><h3>বেসিক পুনর্গঠন</h3><p style="font-size:0.9rem; opacity:0.8;">দুর্বল শিক্ষার্থীদের জন্য Weak Foundation Fixing প্রোগ্রাম।</p></div>
-        <div class="service-card"><i class="fa-solid fa-rocket"></i><h3>Crash Program</h3><p style="font-size:0.9rem; opacity:0.8;">পরীক্ষার আগে সম্পূর্ণ সিলেবাস দ্রুত রিভিশনের ব্যবস্থা।</p></div>
-        <div class="service-card"><i class="fa-solid fa-book-open"></i><h3>অনুশীলনী সমাধান</h3><p style="font-size:0.9rem; opacity:0.8;">পাঠ্যবইয়ের প্রতিটি অংক বুঝে সমাধান করা।</p></div>
-        <div class="service-card"><i class="fa-solid fa-shield-heart"></i><h3>আত্মবিশ্বাস বৃদ্ধি</h3><p style="font-size:0.9rem; opacity:0.8;">গণিতের ভীতি দূর করে আত্মবিশ্বাস গড়ে তোলা।</p></div>
-        <div class="service-card"><i class="fa-brands fa-whatsapp"></i><h3>সার্বক্ষণিক সাপোর্ট</h3><p style="font-size:0.9rem; opacity:0.8;">হোয়াটসঅ্যাপে অংকের ছোটখাটো সমস্যার সমাধান।</p></div>
-        <div class="service-card"><i class="fa-solid fa-file-invoice"></i><h3>মাসিক রিপোর্ট</h3><p style="font-size:0.9rem; opacity:0.8;">অভিভাবককে প্রতি মাসে সন্তানের অগ্রগতির রিপোর্ট প্রদান।</p></div>
-      </div>
-    </div> -->
-
-  <!-- start success story -->
-
+    <!-- start success story -->
   <div class="success-story-section">
       <h2 class="section-title"><i class="fa-solid fa-graduation-cap"></i> আমার কৃতী শিক্ষার্থীদের একাংশ</h2>
       <p style="text-align: center; color: #64748b; margin-bottom: 30px;">
@@ -2119,13 +1903,10 @@
         <i class="fa-solid fa-angle-right"></i>
       </button>
     </div>
-
     </div>
-
     <!-- end -->
     
-
-
+    <!--tesemonal-->
     <h2 class="section-title"><i class="fa-solid fa-quote-left"></i> অভিভাবকদের মতামত</h2>
     <div class="testimonials">
       <div class="review-grid">
@@ -2181,6 +1962,75 @@
       </div>
 
     </div>
+    
+    <!--Free Class Booking-->
+    <div class="contact-section" id="book-free-class" style="text-align: center;">
+      <h2 style="margin-bottom: 10px; color: var(--secondary);"><i class="fa-solid fa-file-arrow-down" style="color:#e11d48;"></i> এক্সক্লুসিভ ম্যাথ শিট ডাউনলোড</h2>
+      
+      <p style="margin-bottom: 25px; color: #64748b; max-width: 650px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+        গণিত মুখস্থের বিষয় নয়! আমি কীভাবে <strong style="color: #0f172a;">কঠিন অংকগুলোকে গল্পের মাধ্যমে</strong> পানির মতো সহজ করে দিই—তা নিজের চোখে দেখতে আপনার সন্তানের ক্লাসের স্পেশাল শিটটি সংগ্রহ করুন সম্পূর্ণ ফ্রিতে।
+        <br>
+        <span style="font-size: 0.85rem; color: #16a34a; display: block; margin-top: 5px;">(ফর্ম পূরণের সাথে সাথেই ডাউনলোড লিংক পেয়ে যাবেন)</span>
+      </p>
+      
+      <form onsubmit="handleForm(event)" id="booking-form" style="text-align: left;">
+        <div class="form-grid">
+          <div>
+            <label style="display:block; margin-bottom:5px; font-weight:600;">শিক্ষার্থীর নাম</label>
+            <input type="text" id="name" placeholder="নাম লিখুন" required>
+          </div>
+          <div>
+            <label style="display:block; margin-bottom:5px; font-weight:600;">মোবাইল নম্বর</label>
+            <input type="tel" id="phone" placeholder="017xxxxxxxx" required>
+          </div>
+          <div class="full-width">
+            <label style="display:block; margin-bottom:5px; font-weight:600;">কোন ক্লাসের শিট প্রয়োজন?</label>
+            <select id="child_class" required>
+              <option value="" disabled selected>ক্লাস নির্বাচন করুন</option>
+              <option value="Class 6">৬ষ্ঠ শ্রেণী</option>
+              <option value="Class 7">৭ম শ্রেণী</option>
+              <option value="Class 8">৮ম শ্রেণী</option>
+              <option value="Class 9">৯ম শ্রেণী</option>
+              <option value="Class 10">১০ম শ্রেণী</option>
+              <option value="Class ssc">SSC পরীক্ষার্থী</option>
+            </select>
+          </div>
+
+          <div class="full-width">
+            <textarea id="message" rows="2" placeholder="আপনার কোনো প্রশ্ন থাকলে এখানে লিখতে পারেন (অপশনাল)..."></textarea>
+          </div>
+
+          <div class="full-width">
+            <button type="submit" style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); box-shadow: 0 4px 15px rgba(22, 163, 74, 0.3);">
+              <i class="fa-solid fa-download"></i> শিট ডাউনলোড করুন
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <div id="download-area" style="display:none; text-align: center; margin-top: 30px; background: #f0fdf4; padding: 25px; border-radius: 15px; border: 2px solid #4ade80; animation: fadeIn 0.5s;">
+        <h3 style="color: #166534; margin-bottom: 10px;"><i class="fa-solid fa-circle-check"></i> ডাউনলোড লিংক তৈরি!</h3>
+        <p style="color: #15803d; margin-bottom: 20px;">আপনার ক্লাসের শিটটি রেডি। নিচের বাটনে ক্লিক করুন।</p>
+        
+        <a id="dynamic-pdf-link" href="#" target="_blank" class="btn" style="background: #2563eb; padding: 12px 35px; border-radius: 50px; font-size: 1.2rem; text-decoration: none; color: white; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);">
+          <i class="fa-solid fa-file-arrow-down"></i> এখনই ডাউনলোড করুন
+        </a>
+        
+        <div class="cta-animated-box">
+           <p class="cta-highlight-text">
+             <i class="fa-solid fa-hand-point-right" style="color: #ef4444;"></i> শিটটি পড়ে যদি ভালো লাগে, তবে আপনার সন্তানের বেসিক স্ট্রং করতে অথবা ক্লাস টপার বানাতে আজই <span style="color:#d97706; text-decoration: underline;">হোম টিউশন বুক করুন!</span>
+           </p>
+           
+           <a href="tel:+8801639498196" class="btn" style="background: #ef4444; color: white; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; font-weight: bold; padding: 10px 25px; border-radius: 10px;">
+             <i class="fa-solid fa-phone-volume"></i> সরাসরি কল করুন: 01639-498196
+           </a>
+        </div>
+      </div>
+
+      <div id="form-msg" style="display:none; text-align: center; margin-top: 20px; color: green; font-weight: bold;"></div>
+    </div>
+
+    
     <!--FQA Start-->
     <h2 class="section-title">সাধারণ কিছু প্রশ্ন (FAQ)</h2>
     <div class="faq-section">
@@ -2254,36 +2104,11 @@
             <i class="fa-regular fa-clock" style="color: var(--accent);"></i> 
             <strong>সময়:</strong> বাদ ফজর – রাত ১০ টা পর্যন্ত (প্রতিদিন)
           </p>
-          <p>অথবা নিচের ফর্মের মাধ্যমেও বার্তা দিতে পারবেন।</p>
         </div>
       </details>
 
     </div>
 
-    <div class="contact-section">
-      <h2 style="margin-bottom: 20px; color: var(--secondary);"><i class="fa-solid fa-address-book"></i> বুকিং ফর্ম</h2>
-      <p style="margin-bottom: 20px; color: #64748b;">কল করতে না চাইলে ফর্মটি পূরণ করুন, আমি কল করবো।</p>
-      <form onsubmit="handleForm(event)">
-        <div class="form-grid">
-          <div><label style="display:block; margin-bottom:5px; font-weight:600;">আপনার নাম</label><input type="text" id="name" placeholder="নাম" required></div>
-          <div><label style="display:block; margin-bottom:5px; font-weight:600;">মোবাইল</label><input type="tel" id="phone" placeholder="017xxxxxxxx" required></div>
-          <div class="full-width">
-            <label style="display:block; margin-bottom:5px; font-weight:600;">কোন ক্লাসের জন্য?</label>
-            <select id="child_class" required>
-              <option value="" disabled selected>নির্বাচন করুন</option>
-              <option value="Class 6">৬ষ্ঠ শ্রেণী</option>
-              <option value="Class 7">৭ম শ্রেণী</option>
-              <option value="Class 8">৮ম শ্রেণী</option>
-              <option value="Class 9">৯ম শ্রেণী</option>
-              <option value="Class 10">১০ম শ্রেণী</option>
-            </select>
-          </div>
-          <div class="full-width"><label style="display:block; margin-bottom:5px; font-weight:600;">বিস্তারিত</label><textarea id="message" rows="3" placeholder="ঠিকানা..."></textarea></div>
-          <div class="full-width"><button type="submit">তথ্য জমা দিন</button></div>
-        </div>
-      </form>
-      <div id="form-msg" style="display:none; text-align: center; margin-top: 20px; color: green; font-weight: bold; background: #dcfce7; padding: 10px; border-radius: 8px;">আপনার তথ্য জমা হয়েছে! খুব শীঘ্রই আমি আপনার সাথে যোগাযোগ করবো ইন শা আল্লাহ্‌।</div>
-    </div>
     <!-- Footer start-->
     <footer>
         <div class="footer-top">
@@ -2324,24 +2149,71 @@
     const scriptURL = "https://script.google.com/macros/s/AKfycbwd1yfxGspJRcUdo1wsY948RcoR3r83z4fO6fAaRFck2VmGTZHzCSJ_oAR12_A7CnT1CA/exec"; 
     
     // Booking Form Handler
+    const pdfLinks = {
+        "Class 6": "https://drive.google.com/file/d/YOUR_CLASS_6_LINK/view", // ক্লাস ৬ এর লিংক এখানে
+        "Class 7": "https://drive.google.com/file/d/YOUR_CLASS_7_LINK/view", // ক্লাস ৭ এর লিংক এখানে
+        "Class 8": "https://drive.google.com/file/d/YOUR_CLASS_8_LINK/view", // ক্লাস ৮ এর লিংক এখানে
+        "Class 9": "https://drive.google.com/file/d/YOUR_CLASS_9_LINK/view", // ক্লাস ৯ এর লিংক এখানে
+        "Class 10": "https://drive.google.com/file/d/YOUR_CLASS_9_LINK/view", // ক্লাস ১০ এর লিংক এখানে
+        "Class ssc": "https://drive.google.com/file/d/YOUR_CLASS_9_LINK/view", // ক্লাস ssc এর লিংক এখানে
+    };
+
+    // ২. এই ফাংশনটি ঠিক আছে (কোনো পরিবর্তনের দরকার নেই)
+    
     function handleForm(e){
         e.preventDefault();
-        const btn = e.target.querySelector('button');
-        const originalText = btn.innerText;
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> পাঠাচ্ছি...';
         
+        // ১. নম্বর ভ্যালিডেশন (নতুন যুক্ত করা অংশ)
+        const phoneInput = document.getElementById('phone').value;
+        const phoneRegex = /^01[0-9]{9}$/; // শর্ত: 01 দিয়ে শুরু এবং মোট ১১ ডিজিট
+
+        if (!phoneRegex.test(phoneInput)) {
+            alert("দয়া করে সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন (যেমন: 017xxxxxxxx)");
+            return; // নম্বর ভুল হলে এখান থেকেই ফিরে যাবে, সাবমিট হবে না
+        }
+
+        // -------------------------------------------
+        
+        const form = e.target;
+        const btn = form.querySelector('button');
+        const originalText = btn.innerHTML;
+        
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> প্রসেসিং হচ্ছে...';
+        
+        const name = document.getElementById('name').value;
+        const cls = document.getElementById('child_class').value;
+        const message = document.getElementById('message').value;
+
         const formData = { 
-            sheet_name: "Sheet1", 
-            name: document.getElementById('name').value, 
-            child_class: document.getElementById('child_class').value, 
-            phone: document.getElementById('phone').value, 
-            message: document.getElementById('message').value 
+            sheet_name: "Leads_With_PDF", 
+            name: name, 
+            child_class: cls, 
+            phone: phoneInput, 
+            message: message 
         };
         
         fetch(scriptURL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData) })
-        .then(() => { document.getElementById('form-msg').style.display = 'block'; e.target.reset(); btn.disabled = false; btn.innerText = originalText; setTimeout(() => { document.getElementById('form-msg').style.display = 'none'; }, 5000); })
-        .catch(error => { alert("সমস্যা হয়েছে! কল করুন।"); btn.disabled = false; btn.innerText = originalText; });
+        .then(() => { 
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> সম্পন্ন হয়েছে';
+            document.getElementById('booking-form').style.display = 'none';
+
+            const downloadArea = document.getElementById('download-area');
+            const pdfBtn = document.getElementById('dynamic-pdf-link');
+            
+            if(pdfLinks[cls]) {
+                pdfBtn.href = pdfLinks[cls];
+                downloadArea.style.display = 'block';
+            } else {
+                document.getElementById('form-msg').style.display = 'block';
+                document.getElementById('form-msg').innerText = "ধন্যবাদ! আপনার তথ্য জমা হয়েছে।";
+            }
+        })
+        .catch(error => { 
+            alert("দুঃখিত, সমস্যা হয়েছে। কল করুন।"); 
+            btn.disabled = false; 
+            btn.innerHTML = originalText; 
+        });
     }
 
     // --- QUIZ DATA & LOGIC START ---
@@ -2801,18 +2673,24 @@
 
     // ১. পেজ লোড হওয়ার ২ সেকেন্ড পর পপ-আপ দেখাবে (যদি আগে সেশনে বন্ধ না করে থাকে)
     window.addEventListener('load', function() {
-      // চেক করবে ইউজার কি আগেই এই সেশনে পপ-আপ দেখেছে কিনা
       if (!sessionStorage.getItem('offerPopupShown')) {
         setTimeout(function() {
           document.getElementById('offer-popup').style.display = 'flex';
-        }, 2000); // ২ সেকেন্ড দেরি করে আসবে
+          
+          // --- নতুন লাইন: স্ক্রল লক করা ---
+          document.body.style.overflow = 'hidden'; 
+          
+        }, 2000);
       }
     });
 
     // ২. পপ-আপ বন্ধ করার ফাংশন
     function closeOfferPopup() {
       document.getElementById('offer-popup').style.display = 'none';
-      // সেশন স্টোরেজে সেভ করা যাতে রিফ্রেশ দিলে বারবার বিরক্ত না করে
+      
+      // --- নতুন লাইন: স্ক্রল আনলক করা (আবার স্ক্রল করা যাবে) ---
+      document.body.style.overflow = 'auto'; 
+
       sessionStorage.setItem('offerPopupShown', 'true');
     }
 
@@ -2822,6 +2700,11 @@
       document.getElementById('quiz-section').scrollIntoView({ 
         behavior: 'smooth' 
       });
+    }
+    // পপ-আপ থেকে শিট সেকশনে যাওয়ার ফাংশন (নতুন)
+    function goToSheetFromPopup() {
+      closeOfferPopup();
+      document.getElementById('book-free-class').scrollIntoView({ behavior: 'smooth' });
     }
 
     // ৪. পপ-আপের বাইরের কালো অংশে ক্লিক করলেও বন্ধ হবে
@@ -2837,43 +2720,107 @@
         reportModal.style.display = "none";
       }
     }
+    //
+    // Story Modal Logic
+    function openStory(imgSrc, title, solution) {
+      document.getElementById('modal-img').src = imgSrc;
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-sol').innerText = solution;
+      
+      const modal = document.getElementById('story-modal');
+      modal.style.display = 'flex';
+      
+      // স্ক্রল লক করা (যাতে পেছনের পেজ না নড়ে)
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeStory() {
+      const modal = document.getElementById('story-modal');
+      modal.style.display = 'none';
+      
+      // স্ক্রল আনলক করা
+      document.body.style.overflow = 'auto';
+    }
+
+    // পপ-আপের বাইরে ক্লিক করলে বন্ধ হবে
+    document.getElementById('story-modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeStory();
+      }
+    });
+    // Visual Demo See More/Less Logic
+    function toggleVisuals() {
+      const extras = document.querySelectorAll('.extra-visual');
+      const btn = document.getElementById('see-more-visual-btn');
+      
+      // চেক করি প্রথম লুকানো আইটেমটি এখন 'none' অবস্থায় আছে কি না
+      let isHidden = extras[0].style.display === 'none';
+
+      extras.forEach(item => {
+        // যদি লুকানো থাকে, তবে 'flex' করে দেখাও। নাহলে 'none' করে লুকাও।
+        item.style.display = isHidden ? 'flex' : 'none'; 
+      });
+
+      if (isHidden) {
+        btn.innerHTML = 'কমিয়ে দেখুন <i class="fa-solid fa-angle-up"></i>';
+      } else {
+        btn.innerHTML = 'আরও দেখুন <i class="fa-solid fa-angle-down"></i>';
+        // অপশনাল: বন্ধ করার পর আবার সেকশনের শুরুতে নিয়ে যাওয়া
+        document.getElementById('visual-demo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
   </script>
     <div id="offer-popup" class="popup-overlay">
-    <div class="popup-content">
-      <button class="popup-close-btn" onclick="closeOfferPopup()">&times;</button>
-      
-      <div class="popup-header">
-        <h2>🎁 বিশেষ জানুয়ারি অফার! <span style="font-size:0.8rem; display:block; margin-top:5px; color:#fef08a;">(সীমিত সময়)</span></h2>
-      </div>
-      
-      <div class="popup-body">
-        <p style="text-align: center; color: #dc2626; font-weight: bold; margin-bottom: 15px;">
-          ১১ জানুয়ারি, ২০২৬—পর্যন্ত সম্পূর্ণ ফ্রি!
-        </p>
+      <div class="popup-content" style="max-width: 550px;">
+        <button class="popup-close-btn" onclick="closeOfferPopup()">&times;</button>
         
-        <p style="text-align: center; margin-bottom: 10px;">
-          আপনি কি নিজের সন্তানের গণিত দক্ষতা যাচাই করতে চান? <br>
-          <span style="color: #b91c1c; background: #fee2e2; padding: 2px 8px; border-radius: 5px; font-weight: bold;">মাত্র ১৫ মিনিটেই বুঝে ফেলুন— কোথায় উন্নতি দরকার! </span> 
-          <br>
-          <strong>এখন পাচ্ছেন ০ টাকা খরচে:</strong>
-        </p>
-        
-        <ul class="offer-list">
-          <li><i class="fa-solid fa-check-circle"></i> প্রফেশনাল লেভেলের লাইভ গণিত টেস্ট</li>
-          <li><i class="fa-solid fa-check-circle"></i> ক্লাস ৬–১০ অনুযায়ী প্রশ্ন সিলেকশন</li>
-          <li><i class="fa-solid fa-check-circle"></i> দুর্বলতা ও শক্তির—তাৎক্ষণিক রিপোর্ট</li>
-          <li><i class="fa-solid fa-check-circle"></i> উন্নতির জন্য ব্যক্তিগত সাজেশন</li>
-        </ul>
-
-        <p style="text-align: center; font-size: 0.9rem; margin: 15px 0; color: #64748b;">
-          এ সুযোগ শুধু <strong>১১ জানুয়ারি, ২০২৬</strong> পর্যন্ত। এরপর এই সুবিধাটি আর ফ্রি থাকবে না।
-        </p>
-
-        <button class="btn-offer-cta" onclick="goToQuizFromPopup()">
-          👉 এখনই Live Test দিন
-        </button>
+        <div class="popup-header" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); padding: 25px;">
+          <h2 style="font-size: 1.5rem; margin:0; color: white; text-transform: uppercase; letter-spacing: 1px;">
+            🎁 নিউ ইয়ার <span style="color: #fef08a; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">ডাবল অফার</span> ধামাকা!
+          </h2>
+          <div style="margin-top: 10px;">
+            <span style="background: #fef08a; color: #b91c1c; padding: 6px 15px; border-radius: 50px; font-size: 0.9rem; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+              <i class="fa-regular fa-clock"></i> ৩১ জানুয়ারি, ২০২৬ পর্যন্ত সম্পূর্ণ ফ্রি!
+            </span>
           </div>
         </div>
-     </div>
+        
+        <div class="popup-body" style="text-align: center;">
+          <p style="color: #334155; margin-bottom: 20px; font-size: 1.05rem; line-height: 1.6;">
+            আপনার সন্তানের <span style="color: #e11d48; font-weight: 800;">গণিত ভীতি দূর করতে</span> 
+            অথবা <span style="color: #16a34a; font-weight: 800;">ক্লাস টপার বানাতে</span> 
+            আমার <strong>২টি স্পেশাল অফার</strong> গ্রহণ করুন:
+          </p>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
+            
+            <div style="background: #f0f9ff; padding: 15px; border-radius: 12px; border: 1px solid #bae6fd; text-align: center;">
+              <div style="background: #e0f2fe; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; color: #0284c7; font-size: 1.5rem;">
+                <i class="fa-solid fa-clipboard-question"></i>
+              </div>
+              <h4 style="color: #0c4a6e; margin-bottom: 5px; font-size: 1rem;">১. Live Test</h4>
+              <p style="font-size: 0.8rem; color: #64748b;">১৫ মিনিটে সন্তানের মেধা ও দুর্বলতা যাচাই করুন।</p>
+              <button onclick="goToQuizFromPopup()" style="margin-top: 10px; background: #0ea5e9; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; width: 100%;">
+                👉 টেস্ট দিন
+              </button>
+            </div>
+
+            <div style="background: #f0fdf4; padding: 15px; border-radius: 12px; border: 1px solid #bbf7d0; text-align: center;">
+              <div style="background: #dcfce7; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; color: #16a34a; font-size: 1.5rem;">
+                <i class="fa-solid fa-file-pdf"></i>
+              </div>
+              <h4 style="color: #14532d; margin-bottom: 5px; font-size: 1rem;">২. Free Sheet</h4>
+              <p style="font-size: 0.8rem; color: #64748b;">ক্লাসভিত্তিক স্পেশাল ম্যাথ শিট ডাউনলোড করুন।</p>
+              <button onclick="goToSheetFromPopup()" style="margin-top: 10px; background: #16a34a; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; width: 100%;">
+                📥 শিট নিন
+              </button>
+            </div>
+
+          </div>
+
+          <p style="font-size: 0.85rem; color: #94a3b8;"><strong>* অফারটি সীমিত সময়ের জন্য প্রযোজ্য</strong></p>
+        </div>
+      </div>
+    </div>
 </body>
 </html>
